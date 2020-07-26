@@ -1,3 +1,1 @@
 # DataMiningVisualizationSystem
-
-Giyn's test.
