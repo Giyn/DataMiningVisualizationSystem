@@ -14,15 +14,45 @@ def submit() :
 
     if request.method == 'POST':
 
-        # result_text = {"statusCode": 200, "message": "访问成功", "dataSet" : request.form['dataSet']}
-        # response = make_response(jsonify(result_text))
-        # response.headers['Access-Control-Allow-Origin'] = '*'
-        # response.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
-        # response.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
+        dataSet = None
 
-        return request.form['dataSet']
+        dropColumns = []
 
-    return '<h1>请使用POST方法访问</br>'
+        discreteColumns = []
+
+        print("header:\n" + str(request.headers))
+
+        print("json:\n" + str(request.json))
+
+        print("data:\n" + str(request.data))
+
+        form = request.form.to_dict()
+
+        if('dataSet' not in form) : return "feature \"dataSet\" not found"
+
+        dataSet = request.form['dataSet']
+
+        if('dropColumns' in form) : dropColumns = request.form['dropColumns']
+
+        if('discreteColumns' in form) : discreteColumns = request.form['discreteColumns']
+
+        print(dataSet)
+
+        print(dropColumns)
+
+        print(discreteColumns)
+
+        return "Submit successfully!"
+
+    return '<h1>请使用POST方法访问</h1>'
+
+@app.before_request
+def before_request():
+    ip = request.remote_addr
+
+    url = request.url
+
+    print("地址[" + str(ip) + "] 试图访问：" + str(url))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
