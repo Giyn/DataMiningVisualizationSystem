@@ -2,3 +2,4 @@ flask
 pandas
 numpy
 matplotlib
+jieba

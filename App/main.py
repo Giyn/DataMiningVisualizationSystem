@@ -3,6 +3,7 @@ from io import StringIO
 
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
+from utils import *
 from pandas import *
 
 app = Flask(__name__)
@@ -22,31 +23,19 @@ def dataFrame() :
 
         text = StringIO(data['dataSet'])
 
-        sep = ','
-
-        if('sep' in data) : sep = data['sep']
+        if ('sep' in data) : sep = data['sep']
 
         df = read_csv(text, sep = sep)
 
-        res = [['id']]
-
-        for i in range(0, len(df)) :
-
-            res.append([i])
-
-        for i in df.columns :
-
-            res[0].append(i)
-
-            for j in range(1, len(df) + 1):
-
-                res[j].append(str(df[i][j - 1]))
+        if("Unnamed: 0" in df.columns) : df = dropColumns(df, columns = ["Unnamed: 0"])
 
         print(df.columns)
 
+        res = DataFrame2Array(df)
+
         return str(res)
 
-    return ""
+    return '<h1>请使用POST方法访问</h1>'
 
 
 @app.route('/api-submit', methods=['POST', 'GET'])
@@ -54,35 +43,11 @@ def submit() :
 
     if request.method == 'POST':
 
-        dataSet = None
+        return '{"msg" : "该API已经停用"}', 403
 
-        dropColumns = []
+    if request.method == 'GET':
 
-        discreteColumns = []
-
-        print("header:\n" + str(request.headers))
-
-        print("json:\n" + str(request.json))
-
-        print("data:\n" + str(request.data))
-
-        form = request.form.to_dict()
-
-        if('dataSet' in form) : dataSet = request.form['dataSet']
-
-        if('dropColumns' in form) : dropColumns = request.form['dropColumns']
-
-        if('discreteColumns' in form) : discreteColumns = request.form['discreteColumns']
-
-        print("dataSet:\n" + str(dataSet))
-
-        print("dropColumns:\n" + str(dropColumns))
-
-        print("discreteColumns:\n" + str(discreteColumns))
-
-        return "Submit successfully!"
-
-    return '<h1>请使用POST方法访问</h1>'
+        return '<h1>该页面已停用</h1>'
 
 @app.before_request
 def before_request():
