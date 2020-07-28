@@ -155,9 +155,9 @@ def predict() :
 
         dataSet = DataFrame2NPArray(dataSet)
 
-        res = model.predict(ssler.fit(dataSet))
+        res = model.predict(ssler.transform(dataSet))
 
-        return DataFrame2Array(DataFrame({'label' : res}))
+        return str(DataFrame2Array(DataFrame({'label' : res})))
 
     return '<h1>请使用POST方法访问</h1>'
 
