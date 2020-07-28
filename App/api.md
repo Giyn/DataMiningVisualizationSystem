@@ -37,12 +37,17 @@
 - **Return:**
   - The hash key to pull train Model and a status code (200 for OK, 403 for error)
 
-## /api-predict(NOT-EQUIPPED)
+## /api-predict
 
 - **METHOD**: POST
 - **Args**:
-  - hash Key I: the hash key to pull data set
-  - hash key II: the hash key to pull trained model
+  - hashKeyI: the hash key to pull data set
+  - hashKeyII: the hash key to pull trained model
 - **Return:**
   - The result in JSON shape and a status code (200 for OK, 403 for error)
 
+## How to explain the Pool Manager?
+
+All in this Image.
+
+![Background](Background.png)

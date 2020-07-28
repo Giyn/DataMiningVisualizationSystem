@@ -1,8 +1,15 @@
 from MachineLearningAlgorithm.LogisticRegression.ML.LogisticRegression import *
+from sklearn.preprocessing import StandardScaler
 
 def LogisticRegressionTraining(x, y) :
 
     model = LogisticRegression()
+
+    ssler = StandardScaler()
+
+    ssler.fit(x)
+
+    x = ssler.transform(x)
 
     print(x)
 
@@ -12,5 +19,5 @@ def LogisticRegressionTraining(x, y) :
 
     print(model.score(x, y))
 
-    return model
+    return model, ssler
 

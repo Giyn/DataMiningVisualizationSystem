@@ -70,10 +70,6 @@ def pretreatment() :
 
             discrete = data['discreteColumns']
 
-            print(data['discreteColumns'])
-
-        print(df)
-
         hashKey = str(hash(dataSet))
 
         pushDataSet(df, discrete, hashKey)
@@ -83,6 +79,8 @@ def pretreatment() :
         return hashKey
 
     return '<h1>请使用POST方法访问</h1>'
+
+
 
 @app.route('/api-fit', methods = ['POST', 'GET'])
 def fit() :
@@ -94,6 +92,8 @@ def fit() :
         dataSet = pullDataSet(str(data['hashKey']))
 
         model = -1
+
+        ssler = None
 
         target = ''
 
@@ -126,32 +126,40 @@ def fit() :
 
             x, y = DataFrame2NPArray(dataSet, target)
 
-            model = LogisticRegressionTraining(x, y)
-
-            pass
+            model, ssler = LogisticRegressionTraining(x, y)
 
         elif(model == 6) :
 
             pass
 
-        key = pushModel(model)
+        key = pushModel(model, ssler)
 
         return str(key)
 
     return '<h1>请使用POST方法访问</h1>'
 
-
-
-@app.route('/api-submit', methods=['POST', 'GET'])
-def submit() :
+@app.route('/api-predict', methods=['POST', 'GET'])
+def predict() :
 
     if request.method == 'POST':
 
-        return '{"msg" : "该API已经停用"}', 403
+        data = json.loads(str(request.data, 'utf-8'))
 
-    if request.method == 'GET':
+        dataSet = pullDataSet(str(data['hashKeyI']))
 
-        return '<h1>该页面已停用</h1>'
+        model, ssler = pullModel(str(data['hashKeyII']))
+
+        if (dataSet is None): return '{"msg" : "数据已过期"}'
+
+        if (model is None): return '{"msg" : "模型已过期"}'
+
+        dataSet = DataFrame2NPArray(dataSet)
+
+        res = model.predict(ssler.fit(dataSet))
+
+        return DataFrame2Array(DataFrame({'label' : res}))
+
+    return '<h1>请使用POST方法访问</h1>'
 
 @app.before_request
 def before_request():
@@ -162,4 +170,5 @@ def before_request():
     print("地址[" + str(ip) + "] 试图访问：" + str(url))
 
 if __name__ == '__main__':
+
     app.run(host='0.0.0.0', port=8000, debug = True)

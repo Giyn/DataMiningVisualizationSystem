@@ -52,7 +52,7 @@ def Array2DataFrame(array:str) :
 
     return res
 
-def DataFrame2NPArray(dataSet:DataFrame, target) :
+def DataFrame2NPArray(dataSet:DataFrame, target = None) :
 
     x = []
 
@@ -64,7 +64,11 @@ def DataFrame2NPArray(dataSet:DataFrame, target) :
 
         for j in dataSet.columns :
 
-            if(j != target) : x[i].append(float(dataSet[j][i]))
+            if(target is None or j != target) : x[i].append(float(dataSet[j][i]))
             else : y.append(float(dataSet[j][i]))
+
+    if(target is None) :
+
+        return np.array(x)
 
     return np.array(x), np.array(y)
