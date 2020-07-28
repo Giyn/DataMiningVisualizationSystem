@@ -22,15 +22,15 @@ def pushModel(model) :
     return key
 
 
-def pushDataSet(dataSet):
+def pushDataSet(dataSet, key):
 
     if (len(dataPool) >= MAXN):
         for i in range(0, 10):
             dataPool.pop(0)
 
-    key = str(hash(dataSet))
-
     dataPool.append([key, dataSet])
+
+    print("dataPool : " + str(len(dataPool)))
 
     return key
 
@@ -42,7 +42,7 @@ def pullModel(hashKey:str):
 
     return None
 
-def pullDataSet(hashKey:str):
+def pullDataSet(hashKey:str) :
 
     for i in dataPool :
 
