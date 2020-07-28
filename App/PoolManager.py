@@ -9,15 +9,15 @@ modelPool = []
 
 dataPool = []
 
-def pushModel(model) :
+def pushModel(model, ssler) :
 
     if(len(modelPool) >= MAXN) :
         for i in range(0, 10) :
             modelPool.pop(0)
 
-    key = str(hash(model))
+    key = str(hash(model) + hash(ssler))
 
-    modelPool.append([key, model])
+    modelPool.append([key, model, ssler])
 
     return key
 
@@ -40,9 +40,9 @@ def pullModel(hashKey:str):
 
     for i in modelPool :
 
-        if(i[0] == hashKey) : return i[1]
+        if(i[0] == hashKey) : return i[1], i[2]
 
-    return None
+    return None, None
 
 def pullDataSet(hashKey:str) :
 
