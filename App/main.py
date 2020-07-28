@@ -4,6 +4,7 @@ from io import StringIO
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
 from utils import *
+from PoolManager import *
 from pandas import *
 
 app = Flask(__name__)
@@ -14,7 +15,7 @@ CORS(app)
 def hello_world():
     return 'Hello, World!'
 
-@app.route('/api-DataFrame', methods=['POST', 'GET'])
+@app.route('/api-DataFrame', methods = ['POST', 'GET'])
 def dataFrame() :
 
     if request.method == 'POST':
@@ -36,6 +37,51 @@ def dataFrame() :
         return str(res)
 
     return '<h1>请使用POST方法访问</h1>'
+
+@app.route('/api-pretreatment', methods = ['POST', 'GET'])
+def dataFrame() :
+
+    if request.method == 'POST':
+
+        data = json.loads(str(request.data, 'utf-8'))
+
+        dataSet = str(data['dataSet'])
+
+        df = Array2DataFrame(dataSet)
+
+        hashKey = pushDataSet(df)
+
+        if("Unnamed: 0" in df.columns) : df = dropColumns(df, columns = ["Unnamed: 0"])
+
+        if('dropColumns' in data) : print(data['dropColumns'])
+
+        if('discreteColumns' in data) : print(data['discreteColumns'])
+
+        print(df.columns)
+
+        return hashKey
+
+    return '<h1>请使用POST方法访问</h1>'
+
+@app.route('/api-fit', methods = ['POST', 'GET'])
+def dataFrame() :
+
+    if request.method == 'POST':
+
+        data = json.loads(str(request.data, 'utf-8'))
+
+        dataSet = pullDataSet(str(data['hashKey']))
+
+        if(dataSet == None) : return '{"msg" : "数据已过期"}'
+
+        if('models' in data) : print(data['models'])
+
+        print(dataSet.columns)
+
+        return str(DataFrame2Array(dataSet))
+
+    return '<h1>请使用POST方法访问</h1>'
+
 
 
 @app.route('/api-submit', methods=['POST', 'GET'])
