@@ -51,3 +51,20 @@ def Array2DataFrame(array:str) :
     res = DataFrame(res)
 
     return res
+
+def DataFrame2NPArray(dataSet:DataFrame, target) :
+
+    x = []
+
+    y = []
+
+    for i in range(0, len(dataSet)) :
+
+        x.append([])
+
+        for j in dataSet.columns :
+
+            if(j != target) : x[i].append(float(dataSet[j][i]))
+            else : y.append(float(dataSet[j][i]))
+
+    return np.array(x), np.array(y)

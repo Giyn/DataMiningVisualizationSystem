@@ -26,7 +26,8 @@
 - **METHOD**: POST
 - **Args**:
   - hashKey: the hash key to pull data set
-  - models: the model chosen to fit the data set
+  - target: the target our model should predict and we call "label" as term
+  - model: the model chosen to fit the data set
     - 1: Naive Bayes
     - 2: KNN
     - 3: SVM

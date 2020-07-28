@@ -22,17 +22,19 @@ def pushModel(model) :
     return key
 
 
-def pushDataSet(dataSet, key):
+def pushDataSet(dataSet, discrete, key):
+
+    if(pullDataSet(key) is not None) : return False
 
     if (len(dataPool) >= MAXN):
         for i in range(0, 10):
             dataPool.pop(0)
 
-    dataPool.append([key, dataSet])
+    dataPool.append([key, dataSet, discrete])
 
     print("dataPool : " + str(len(dataPool)))
 
-    return key
+    return True
 
 def pullModel(hashKey:str):
 
