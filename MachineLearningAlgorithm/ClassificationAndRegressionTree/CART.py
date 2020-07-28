@@ -189,6 +189,3 @@ if __name__ == '__main__':
     ass = reg.reg_assessment(pr, y_test)
     ass.assessment()
     pass
-
-
-
