@@ -12,7 +12,7 @@ from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
 from App.utils import *
 from App.PoolManager import *
-from MachineLearningAlgorithm.LogisticRegression.ML.LogisticRegression import *
+from App.ModelManager import *
 
 app = Flask(__name__)
 
@@ -56,17 +56,29 @@ def pretreatment() :
 
         df = Array2DataFrame(dataSet)
 
+        discrete = []
+
+        if('dropColumns' in data) :
+
+            dataSet += str(data['dropColumns'])
+
+            df = dropColumns(df, columns = data['dropColumns'])
+
+        if('discreteColumns' in data) :
+
+            dataSet += str(data['dropColumns'])
+
+            discrete = data['discreteColumns']
+
+            print(data['discreteColumns'])
+
         print(df)
 
-        hashKey = str(pushDataSet(df, str(hash(dataSet))))
+        hashKey = str(hash(dataSet))
+
+        pushDataSet(df, discrete, hashKey)
 
         if("Unnamed: 0" in df.columns) : df = dropColumns(df, columns = ["Unnamed: 0"])
-
-        if('dropColumns' in data) : print(data['dropColumns'])
-
-        if('discreteColumns' in data) : print(data['discreteColumns'])
-
-        # print(pullDataSet(hashKey))
 
         return hashKey
 
@@ -81,15 +93,50 @@ def fit() :
 
         dataSet = pullDataSet(str(data['hashKey']))
 
-        print(dataSet)
+        model = -1
+
+        target = ''
 
         if(dataSet is None) : return '{"msg" : "数据已过期"}'
 
-        if('models' in data) : print(data['models'])
+        if('model' in data) : model = data['model']
 
-        print(dataSet.columns)
+        if(model <= 0 or model > 6) : return '{"msg" : "模型种类无效"}'
 
-        return str(DataFrame2Array(dataSet))
+        if('target' in data and data['target'] in dataSet.columns): target = data['target']
+        else : return '{"msg" : "标签无效"}'
+
+        if(model == 1) :
+
+            pass
+
+        elif(model == 2) :
+
+            pass
+
+        elif(model == 3) :
+
+            pass
+
+        elif(model == 4) :
+
+            pass
+
+        elif(model == 5) :
+
+            x, y = DataFrame2NPArray(dataSet, target)
+
+            model = LogisticRegressionTraining(x, y)
+
+            pass
+
+        elif(model == 6) :
+
+            pass
+
+        key = pushModel(model)
+
+        return str(key)
 
     return '<h1>请使用POST方法访问</h1>'
 
