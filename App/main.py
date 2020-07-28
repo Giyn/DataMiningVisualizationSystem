@@ -1,11 +1,18 @@
+import sys,os
+
+p = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  #获取要导入模块的上上级目录
+
+sys.path.insert(0,p)
+
+
 import json
 from io import StringIO
 
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
-from utils import *
-from PoolManager import *
-from pandas import *
+from App.utils import *
+from App.PoolManager import *
+from MachineLearningAlgorithm.LogisticRegression.ML.LogisticRegression import *
 
 app = Flask(__name__)
 
@@ -39,7 +46,7 @@ def dataFrame() :
     return '<h1>请使用POST方法访问</h1>'
 
 @app.route('/api-pretreatment', methods = ['POST', 'GET'])
-def dataFrame() :
+def pretreatment() :
 
     if request.method == 'POST':
 
@@ -49,7 +56,9 @@ def dataFrame() :
 
         df = Array2DataFrame(dataSet)
 
-        hashKey = pushDataSet(df)
+        print(df)
+
+        hashKey = str(pushDataSet(df, str(hash(dataSet))))
 
         if("Unnamed: 0" in df.columns) : df = dropColumns(df, columns = ["Unnamed: 0"])
 
@@ -57,14 +66,14 @@ def dataFrame() :
 
         if('discreteColumns' in data) : print(data['discreteColumns'])
 
-        print(df.columns)
+        # print(pullDataSet(hashKey))
 
         return hashKey
 
     return '<h1>请使用POST方法访问</h1>'
 
 @app.route('/api-fit', methods = ['POST', 'GET'])
-def dataFrame() :
+def fit() :
 
     if request.method == 'POST':
 
@@ -72,7 +81,9 @@ def dataFrame() :
 
         dataSet = pullDataSet(str(data['hashKey']))
 
-        if(dataSet == None) : return '{"msg" : "数据已过期"}'
+        print(dataSet)
+
+        if(dataSet is None) : return '{"msg" : "数据已过期"}'
 
         if('models' in data) : print(data['models'])
 

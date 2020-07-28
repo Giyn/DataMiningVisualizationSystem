@@ -36,7 +36,7 @@ def DataFrame2Array(df:DataFrame) :
 
 def Array2DataFrame(array:str) :
 
-    array = list(array)
+    array = eval(array)
 
     res = {}
 
