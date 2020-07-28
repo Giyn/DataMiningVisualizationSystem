@@ -4,3 +4,4 @@ numpy
 matplotlib
 jieba
 sklearn
+cvxopt
