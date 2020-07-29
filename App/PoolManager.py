@@ -19,10 +19,12 @@ def pushModel(model, ssler) :
 
     modelPool.append([key, model, ssler])
 
+    print("modelPool :{0}".format(len(modelPool), MAXN))
+
     return key
 
 
-def pushDataSet(dataSet, discrete, key):
+def pushDataSet(dataSet, discrete, textColumns, key):
 
     if(pullDataSet(key) is not None) : return False
 
@@ -30,9 +32,9 @@ def pushDataSet(dataSet, discrete, key):
         for i in range(0, 10):
             dataPool.pop(0)
 
-    dataPool.append([key, dataSet, discrete])
+    dataPool.append([key, dataSet, discrete, textColumns])
 
-    print("dataPool : " + str(len(dataPool)))
+    print("dataPool :{0}".format(len(dataPool), MAXN))
 
     return True
 
@@ -48,6 +50,6 @@ def pullDataSet(hashKey:str) :
 
     for i in dataPool :
 
-        if(i[0] == hashKey) : return i[1]
+        if(i[0] == hashKey) : return i[1], i[2], i[3]
 
     return None

@@ -13,6 +13,7 @@ from flask_cors import CORS
 from App.utils import *
 from App.PoolManager import *
 from App.ModelManager import *
+from MachineLearningAlgorithm.Bayes.NaiveBayes import *
 
 app = Flask(__name__)
 
@@ -58,11 +59,13 @@ def pretreatment() :
 
         discrete = []
 
+        textColumn = None
+
         if('dropColumns' in data) :
 
             dataSet += str(data['dropColumns'])
 
-            df = dropColumns(df, columns = data['dropColumns'])
+            if(len(data['dropColumns']) != 1 or data['dropColumns'][0] != '' ) : df = dropColumns(df, columns = data['dropColumns'])
 
         if('discreteColumns' in data) :
 
@@ -70,9 +73,16 @@ def pretreatment() :
 
             discrete = data['discreteColumns']
 
+        if ('textColumn' in data):
+
+            dataSet += str(data['textColumn'])
+
+            textColumn = str(data['textColumn'])
+
+
         hashKey = str(hash(dataSet))
 
-        pushDataSet(df, discrete, hashKey)
+        pushDataSet(df, discrete, textColumn, hashKey)
 
         if("Unnamed: 0" in df.columns) : df = dropColumns(df, columns = ["Unnamed: 0"])
 
@@ -89,7 +99,7 @@ def fit() :
 
         data = json.loads(str(request.data, 'utf-8'))
 
-        dataSet = pullDataSet(str(data['hashKey']))
+        dataSet, discrete, textColumns = pullDataSet(str(data['hashKey']))
 
         model = -1
 
@@ -108,6 +118,10 @@ def fit() :
 
         if(model == 1) :
 
+            y = dataSet[target]
+
+            model, ssler = NBayesTraining(dataSet, y, textColumns)
+
             pass
 
         elif(model == 2) :
@@ -116,11 +130,17 @@ def fit() :
 
         elif(model == 3) :
 
-            pass
+            x, y = DataFrame2NPArray(dataSet, target)
+
+            model, ssler = SVMTraining(x, y)
 
         elif(model == 4) :
 
-            pass
+            x, y = DataFrame2NPArray(dataSet, target)
+
+            x = x.reshape(len(x))
+
+            model, ssler = LinearRegressionTraining(x, y)
 
         elif(model == 5) :
 
@@ -145,7 +165,7 @@ def predict() :
 
         data = json.loads(str(request.data, 'utf-8'))
 
-        dataSet = pullDataSet(str(data['hashKeyI']))
+        dataSet, discrete, textColumn = pullDataSet(str(data['hashKeyI']))
 
         model, ssler = pullModel(str(data['hashKeyII']))
 
@@ -153,9 +173,15 @@ def predict() :
 
         if (model is None): return '{"msg" : "模型已过期"}'
 
-        dataSet = DataFrame2NPArray(dataSet)
+        if(not isinstance(model, NaiveBayesClassifier)) :
 
-        res = model.predict(ssler.transform(dataSet))
+            dataSet = DataFrame2NPArray(dataSet)
+
+            res = model.predict(ssler.transform(dataSet))
+
+        else :
+
+            res = model.predict(ssler.transform(dataSet, textColumn))
 
         return str(DataFrame2Array(DataFrame({'label' : res})))
 
