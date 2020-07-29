@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from knn import knn
-from knn import predict
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas.plotting import parallel_coordinates
@@ -27,7 +27,6 @@ X_train = value[:,:-1]
 
 y_test = value[:2,-1]
 X_test = value[:2,:-1]
-
 
 
 X = X_train[:, :2] # 只取前两个特征

@@ -25,110 +25,115 @@ def gaussian(dist, sigma=10.0):
 @return:score - the right score
 
 """
-def knn(X_train,X_test,y_train,y_test):
-    k = 11 #超参数取11
+class knn:
+    def __init__(self,X_train,y_train):
+        self.X_train =X_train
+        self.y_train = y_train
 
-    predict_true = 0 #the num of right predicted
-    max = len(X_test)#the max num of iteration
+    def fit(self,X_test, y_test):
+        k = 11  # 超参数取11
 
-    for i in range(max):
-        x_p = X_test[i]
-        y_p = y_test[i]
+        predict_true = 0  # the num of right predicted
+        max = X_test.shape[0]  # the max num of iteration
 
-        distances = [np.sqrt(np.sum((x_p - x) ** 2)) for x in X_train]
-        #calculate the distance between point in x_p and point in x
-        d = np.sort(distances)
-        #sort the distances
-        nearest = np.argsort(distances)
-        #the index of sorted data
-        #print(nearest)
+        for i in range(max):
+            x_p = X_test[i]
+            y_p = y_test[i]
 
-        topk_y = [y_train[j] for j in nearest[:k]]
-        #select k nearest num
+            distances = [np.sqrt(np.sum((x_p - x) ** 2)) for x in self.X_train]
+            # calculate the distance between point in x_p and point in x
+            d = np.sort(distances)
+            # sort the distances
+            nearest = np.argsort(distances)
+            # the index of sorted data
+            # print(nearest)
 
-        classCount = {}
-        for i in range(0, k):
-            voteLabel = topk_y[i]
-            weight = gaussian(distances[nearest[i]])
-            # print(index, dist[index],weight)
-            ## 这里不再是加一，而是权重*1
-            classCount[voteLabel] = classCount.get(voteLabel, 0) + weight * 1
+            topk_y = [self.y_train[j] for j in nearest[:k]]
+            # select k nearest num
 
-        maxCount = 0
+            classCount = {}
+            for i in range(0, k):
+                voteLabel = topk_y[i]
+                weight = gaussian(distances[nearest[i]])
+                # print(index, dist[index],weight)
+                ## 这里不再是加一，而是权重*1
+                classCount[voteLabel] = classCount.get(voteLabel, 0) + weight * 1
 
-        for key, value in classCount.items():
-            if value > maxCount:
-                maxCount = value
-                classes = key
-        #select the type of max num
-        if (classes == y_p): predict_true += 1
+            maxCount = 0
 
-        precision = predict_true / max
+            for key, value in classCount.items():
+                if value > maxCount:
+                    maxCount = value
+                    classes = key
+            # select the type of max num
+            if (classes == y_p): predict_true += 1
 
-    return precision
+            precision = float(predict_true / max)
 
+        return precision
 
-"""
-@function:predict the data
-@parameter:
-@return:X_train - the train data
-        X_p - the data need to be predicted
-        y_train - the train target
-        
-@return:score - the right score
+    """
+    @function:predict the data
+    @parameter:
+    @return:X_train - the train data
+            X_p - the data need to be predicted
+            y_train - the train target
 
-"""
-def predict(X_train,y_train,X_p):
-    k = 11 #超参数取11
+    @return:score - the right score
 
-    predict_true = 0 #the num of right predicted
-    max = len(X_p)#the max num of iteration
-    y_p = []
-    for i in range(max):
-        x_p = X_p[i]
+    """
 
+    def predict(self, X_p):
+        k = 11  # 超参数取11
 
-        distances = [np.sqrt(np.sum((x_p - x) ** 2)) for x in X_train]
-        #calculate the distance between point in x_p and point in x
-        d = np.sort(distances)
-        #sort the distances
-        nearest = np.argsort(distances)
-        #the index of sorted data
-        #print(nearest)
+        predict_true = 0  # the num of right predicted
+        max = X_p.shape[0] # the max num of iteration
+        y_p = []
+        for i in range(max):
+            x_p = X_p[i]
 
-        topk_y = [y_train[j] for j in nearest[:k]]
-        #select k nearest num
+            distances = [np.sqrt(np.sum((x_p - x) ** 2)) for x in self.X_train]
+            # calculate the distance between point in x_p and point in x
+            d = np.sort(distances)
+            # sort the distances
+            nearest = np.argsort(distances)
+            # the index of sorted data
+            # print(nearest)
 
-        for i in range(k):
+            topk_y = [self.y_train[j] for j in nearest[:k]]
+            # select k nearest num
+
+            for i in range(k):
+                if topk_y[i] == 'pear':
+                    color = 'b'
+                elif topk_y[i] == 'poplar':
+                    color = 'y'
+                else:
+                    color = 'g'
+                plt.scatter(self.X_train[nearest[i], 0], self.X_train[nearest[i], 1], color=color)
+            classCount = {}
+            for i in range(0, k):
+                voteLabel = topk_y[i]
+                weight = gaussian(distances[nearest[i]])
+                # print(index, dist[index],weight)
+                ## 这里不再是加一，而是权重*1
+                classCount[voteLabel] = classCount.get(voteLabel, 0) + weight * 1
+
+            maxCount = 0
+
+            for key, value in classCount.items():
+                if value > maxCount:
+                    maxCount = value
+                    classes = key
+            # select the type of max num
+            y_p.append(classes)
             if topk_y[i] == 'pear':
                 color = 'b'
             elif topk_y[i] == 'poplar':
                 color = 'y'
-            else:color ='g'
-            plt.scatter(X_train[nearest[i], 0], X_train[nearest[i], 1], color=color)
-        classCount = {}
-        for i in range(0, k):
-            voteLabel = topk_y[i]
-            weight = gaussian(distances[nearest[i]])
-            # print(index, dist[index],weight)
-            ## 这里不再是加一，而是权重*1
-            classCount[voteLabel] = classCount.get(voteLabel, 0) + weight * 1
+            else:
+                color = 'g'
+            plt.scatter(x_p[0], x_p[1], color=color, s=100, edgecolors='r')
+        plt.savefig("./Pictures/result.png")  # 保存原始数据分布图
 
-        maxCount = 0
-
-        for key, value in classCount.items():
-            if value > maxCount:
-                maxCount = value
-                classes = key
-        #select the type of max num
-        y_p.append(classes)
-        if topk_y[i] == 'pear':
-            color = 'b'
-        elif topk_y[i] == 'poplar':
-            color = 'y'
-        else:
-            color = 'g'
-        plt.scatter(x_p[0], x_p[1], color=color,s =100,edgecolors= 'r')
-    plt.savefig("./Pictures/result.png")  # 保存原始数据分布图
-
-    return y_p
+        return y_p
