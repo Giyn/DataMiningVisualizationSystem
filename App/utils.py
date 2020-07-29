@@ -1,5 +1,6 @@
 import numpy as np
 from pandas import *
+import re
 import matplotlib.pyplot as plt
 
 def dropColumns(dataSet:DataFrame, columns:list)  -> DataFrame:
@@ -72,3 +73,21 @@ def DataFrame2NPArray(dataSet:DataFrame, target = None) :
         return np.array(x)
 
     return np.array(x), np.array(y)
+
+def NLAnalysis(text:DataFrame, textColumns, dicts = None) :
+
+    phrase_position = {}
+
+    for j in textColumns :
+
+        for i in range(0, len(text)):
+
+            text = text.loc[i]['text']
+
+            text = re.findall('([A-Za-z]+)', text)
+
+            for word in text:
+
+                if (word not in phrase_position): phrase_position[word] = len(phrase_position)
+
+    pass

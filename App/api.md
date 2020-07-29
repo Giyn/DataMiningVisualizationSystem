@@ -18,6 +18,8 @@
     - ["id", "feature1"]
   - discreteColumns: the columns with discrete elements value like:
     - ["feature1"]
+  - textColumn: the columns with Text like:
+    - "text"
 - **Return:**
   - The hash key to pull data set and a status code (200 for OK, 403 for error)
 
