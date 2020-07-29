@@ -3,7 +3,7 @@ from MachineLearningAlgorithm.LinearRegression.ML.LinearRegression import *
 from MachineLearningAlgorithm.SupportVectorMachine.SupportVectorMachine import *
 from MachineLearningAlgorithm.ClassificationAndRegressionTree.CART import *
 from MachineLearningAlgorithm.Bayes.NaiveBayes import *
-from MachineLearningAlgorithm.KNN.knn import *
+from MachineLearningAlgorithm.KNN.KNN import *
 from sklearn.preprocessing import StandardScaler
 from MachineLearningAlgorithm.Bayes.TextAnalyzer import *
 
