@@ -15,6 +15,12 @@ from App.PoolManager import *
 from App.ModelManager import *
 from MachineLearningAlgorithm.Bayes.NaiveBayes import *
 
+set_option('display.max_columns', None)
+
+set_option('display.max_rows', None)
+
+set_option('max_colwidth', 100)
+
 app = Flask(__name__)
 
 CORS(app)
@@ -67,20 +73,28 @@ def pretreatment() :
 
             if(len(data['dropColumns']) != 1 or data['dropColumns'][0] != '' ) : df = dropColumns(df, columns = data['dropColumns'])
 
+        df = df.dropna(axis = 0, how = 'any')
+
+        df = df.reset_index(drop=True)
+
         if('discreteColumns' in data) :
 
-            dataSet += str(data['dropColumns'])
+            dataSet += str(data['discreteColumns'])
 
             discrete = data['discreteColumns']
+
+            if(len(data['discreteColumns']) != 1 or data['discreteColumns'][0] != '' ) : df = getDummies(df, columns = discrete)
 
         if ('textColumn' in data):
 
             dataSet += str(data['textColumn'])
 
-            textColumn = str(data['textColumn'])
+            if(data['textColumn'] != '' ) : textColumn = str(data['textColumn'])
 
 
         hashKey = str(hash(dataSet))
+
+        print(df)
 
         pushDataSet(df, discrete, textColumn, hashKey)
 
@@ -122,11 +136,11 @@ def fit() :
 
             model, ssler = NBayesTraining(dataSet, y, textColumns)
 
-            pass
-
         elif(model == 2) :
 
-            pass
+            x, y = DataFrame2NPArray(dataSet, target)
+
+            model, ssler = KNNTraining(x, y)
 
         elif(model == 3) :
 
@@ -150,7 +164,9 @@ def fit() :
 
         elif(model == 6) :
 
-            pass
+            x, y = DataFrame2NPArray(dataSet, target)
+
+            model, ssler = CART_REGTraining(x, y)
 
         key = pushModel(model, ssler)
 

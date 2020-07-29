@@ -47,7 +47,10 @@ def Array2DataFrame(array:str) :
 
         for j in range(1, len(array)) :
 
-            res[array[0][i]].append(array[j][i])
+            if(array[j][i] == 'nan') :
+                res[array[0][i]].append(np.nan)
+            else :
+                res[array[0][i]].append(array[j][i])
 
     res = DataFrame(res)
 
@@ -65,8 +68,19 @@ def DataFrame2NPArray(dataSet:DataFrame, target = None) :
 
         for j in dataSet.columns :
 
-            if(target is None or j != target) : x[i].append(float(dataSet[j][i]))
-            else : y.append(float(dataSet[j][i]))
+            if(is_number(dataSet[j][i])) :
+
+                if (target is None or j != target):
+                    x[i].append(float(dataSet[j][i]))
+                else:
+                    y.append(float(dataSet[j][i]))
+
+            else :
+
+                if (target is None or j != target):
+                    x[i].append(dataSet[j][i])
+                else:
+                    y.append(dataSet[j][i])
 
     if(target is None) :
 
@@ -74,20 +88,14 @@ def DataFrame2NPArray(dataSet:DataFrame, target = None) :
 
     return np.array(x), np.array(y)
 
-def NLAnalysis(text:DataFrame, textColumns, dicts = None) :
 
-    phrase_position = {}
+def is_number(s) :
+    try:
+        float(s)
 
-    for j in textColumns :
+        return True
 
-        for i in range(0, len(text)):
+    except ValueError :
+        pass
 
-            text = text.loc[i]['text']
-
-            text = re.findall('([A-Za-z]+)', text)
-
-            for word in text:
-
-                if (word not in phrase_position): phrase_position[word] = len(phrase_position)
-
-    pass
+    return False
