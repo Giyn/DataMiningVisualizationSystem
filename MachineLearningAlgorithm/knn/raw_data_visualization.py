@@ -37,7 +37,7 @@ plt.rcParams['axes.facecolor'] = 'ivory' # 添加背景色
 plt.title("tree-Dataset") # 添加标题
 plt.xlabel('leaf length') # 添加横坐标标签
 plt.ylabel('leaf width') # 添加纵坐标标签
-plt.scatter(X[y=='poplar',0], X[y=='poplar',1], color='g')
+plt.scatter(X[y=='poplar',0], X[y=='poplar',1], color='lime')
 plt.scatter(X[y=='pear',0], X[y=='pear',1], color='b')
 plt.scatter(X[y=='ginkgo',0], X[y=='ginkgo',1], color='r')
 plt.savefig("./Pictures/raw_scatter.png") # 保存原始数据分布图
@@ -58,5 +58,5 @@ plt.savefig("./Pictures/raw_radviz.png") # 保存原始数据分布图
 # 原始数据可视化（andrews_curves）
 plt.figure('多维度-andrews_curves')
 plt.title('andrews_curves')
-andrews_curves(data, 'Class', color=['pink', 'gold','r'])
+andrews_curves(data, 'Class', color=['y', 'r','c'])
 plt.savefig("./Pictures/raw_andrews_curves.png") # 保存原始数据分布图

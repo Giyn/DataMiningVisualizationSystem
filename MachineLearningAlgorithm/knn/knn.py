@@ -27,14 +27,12 @@ def gaussian(dist, sigma=10.0):
 """
 class knn:
     def __init__(self,X_train,y_train):
-        self.X_train = None
-        self.y_train = None
-
-    def fit(self,X_train,y_train):
         self.X_train = X_train
-        self.y_train = y_train
+        self.y_train =y_train
 
-    def score(self,X_test, y_test):
+
+
+    def fit(self,X_test, y_test):
         k = 11  # 超参数取11
 
         predict_true = 0  # the num of right predicted
