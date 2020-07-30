@@ -25,7 +25,7 @@ def gaussian(dist, sigma=10.0):
 @return:score - the right score
 
 """
-class knn:
+class KNN:
     def __init__(self,X_train,y_train):
         self.X_train = X_train
         self.y_train =y_train
