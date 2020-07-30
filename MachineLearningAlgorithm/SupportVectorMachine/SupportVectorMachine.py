@@ -36,7 +36,8 @@ class SVM:
         :param coef: 多项式核函数参数
         """
         self.C = C
-        self.kernel = kernel
+        self.kernel_spawner = kernel
+        self.kernel = None
         self.power = power
         self.gamma = gamma
         self.coef = coef
@@ -55,7 +56,7 @@ class SVM:
         m, n = np.shape(X)
         if not self.gamma:
             self.gamma = 1 / n  # 若为空，设默认值
-        self.kernel = self.kernel(  # 初始化核函数
+        self.kernel = self.kernel_spawner(  # 初始化核函数
             power=self.power,
             gamma=self.gamma,
             coef=self.coef

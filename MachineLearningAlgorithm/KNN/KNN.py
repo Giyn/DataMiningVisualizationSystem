@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-
+from pandas import DataFrame
 import matplotlib.pyplot as plt
 """
 @function:the gaussian function
@@ -25,19 +25,21 @@ def gaussian(dist, sigma=10.0):
 @return:score - the right score
 
 """
-class knn:
+class KNN:
     def __init__(self,X_train,y_train):
         self.X_train = X_train
         self.y_train =y_train
+        self.assess_matrix = None
+        self.presion = 0
 
 
 
     def fit(self,X_test, y_test):
         k = 11  # 超参数取11
-
+        matrix = DataFrame(np.zeros((3,3)),index=['pear', 'ginkgo', 'poplar'],columns=['pear', 'ginkgo', 'poplar'])
         predict_true = 0  # the num of right predicted
         max = X_test.shape[0]  # the max num of iteration
-
+        y_predict = []
         for i in range(max):
             x_p = X_test[i]
             y_p = y_test[i]
@@ -68,11 +70,38 @@ class knn:
                     maxCount = value
                     classes = key
             # select the type of max num
-            if (classes == y_p): predict_true += 1
+            if (classes == y_p):
+                predict_true += 1
+                y_predict.append(classes)
 
-            precision = float(predict_true / max)
+        for i in range(len(y_predict)):
+            matrix.loc[y_predict[i]][y_test[i]] += 1
 
-        return precision
+        accuracy = float(predict_true / max)
+        assess_matrix = DataFrame(np.zeros((2, 3)), index=['precision', 'recall'],
+                                  columns=['pear', 'ginkgo', 'poplar'])
+
+        precision = matrix.apply(lambda x: x.sum())
+        recall = matrix.apply(lambda x: x.sum(), axis=1)
+
+        for i in range(3):  # compute assess_matrix
+            numerator = matrix.iat[i, i]
+            print(numerator / precision[i])
+            if precision[i] == 0.0:
+                assess_matrix.iat[0, i] = None
+            else:
+                assess_matrix.iat[0, i] = numerator / precision[i]
+
+            if recall[i] == 0.0:
+                assess_matrix.iat[1, i] = None
+            else:
+                assess_matrix.iat[1, i] = float(numerator / recall[i])
+
+        print(assess_matrix)
+        self.accuracy = accuracy
+        self.assess_matrix = assess_matrix
+
+
 
     """
     @function:predict the data

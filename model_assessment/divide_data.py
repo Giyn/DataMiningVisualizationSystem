@@ -1,4 +1,5 @@
 import numpy as np
+import copy
 
 def train_test_split(X, y, test_ratio, seed=None): # 留出法
     """
@@ -38,16 +39,17 @@ def cross_validation(algorihm, X, y, n): #交叉验证法
         a = all[i:i+size]
         s.append(a)
     result = np.empty((n,)) # 记录准确率
+
     # 遍历s，交叉验证过程
-    for i in range(len(s)):
-        b = s.copy()
+    for i in range(n):
+        b = copy.deepcopy(s)
         verify = b.pop(i) # 弹出一个元素做验证集
         train = np.hstack(b) # 其他元素合并做训练集
         # 根据索引找元素
-        verify_real_X = np.array([X[i] for i in verify])
-        verify_real_y = np.array([y[i] for i in verify])
-        train_real_X = np.array([X[i] for i in train])
-        train_real_y = np.array([y[i] for i in train])
+        verify_real_X = np.array([X[j] for j in verify])
+        verify_real_y = np.array([y[j] for j in verify])
+        train_real_X = np.array([X[j] for j in train])
+        train_real_y = np.array([y[j] for j in train])
         # 代入验证类
         algorihm.fit(train_real_X, train_real_y)
         verify_predict = algorihm.predict(verify_real_X) #计算预测值

@@ -57,24 +57,6 @@ def SVMTraining(x, y) :
 
     return model, ssler
 
-# def CART_CLFTraining(x, y) :
-#
-#     model = DecisionTree_CART(tree_type='clf')
-#
-#     ssler = StandardScaler()
-#
-#     ssler.fit(x)
-#
-#     x = ssler.transform(x)
-#
-#     print(x)
-#
-#     print(y)
-#
-#     model.fit(x, y)
-#
-#     return model, ssler
-
 def CART_REGTraining(x, y) :
 
     model = DecisionTree_CART(tree_type='reg')
