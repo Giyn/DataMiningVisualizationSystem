@@ -165,6 +165,6 @@ class KNN:
             else:
                 color = 'g'
             plt.scatter(x_p[0], x_p[1], color=color, s=100, edgecolors='r')
-        plt.savefig("./Pictures/result.png")  # 保存原始数据分布图
+        # plt.savefig("./Pictures/result.png")  # 保存原始数据分布图
 
         return y_p

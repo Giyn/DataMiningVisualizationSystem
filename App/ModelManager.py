@@ -81,7 +81,7 @@ def KNNTraining(x, y) :
 
     x = ssler.transform(x)
 
-    model = knn(x, y)
+    model = KNN(x, y)
 
     print(model.fit(x, y))
 

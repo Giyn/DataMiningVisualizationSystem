@@ -183,7 +183,7 @@ def fit() :
 
         key = pushModel(model, ssler)
 
-        res = jsonify({
+        res = {
 
             "hashKey" : str(key),
 
@@ -191,11 +191,9 @@ def fit() :
 
             "status_code" : 200
 
-        })
+        }
 
-        print(str(res))
-
-        return str(res)
+        return jsonify(res)
 
     return '<h1>请使用POST方法访问</h1>'
 
