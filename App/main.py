@@ -15,6 +15,7 @@ from App.PoolManager import *
 from App.ModelManager import *
 from MachineLearningAlgorithm.Bayes.NaiveBayes import *
 from model_assessment.divide_data import *
+from model_assessment.reg import *
 
 set_option('display.max_columns', None)
 
@@ -94,8 +95,6 @@ def pretreatment() :
 
 
         hashKey = str(hash(dataSet))
-
-        print(df)
 
         pushDataSet(df, discrete, textColumn, hashKey)
 
@@ -183,11 +182,21 @@ def fit() :
 
         key = pushModel(model, ssler)
 
+        reg_ass = reg_assessment(model.predict(x), y)
+
         res = {
 
             "hashKey" : str(key),
 
             "cv_score" : cv_score,
+
+            "MSE" : reg_ass.MSE(),
+
+            "MAE" : reg_ass.MAE(),
+
+            "RMSE" : reg_ass.RMSE(),
+
+            "RS" : reg_ass.R_square(),
 
             "status_code" : 200
 
