@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
-from knn import knn
+from KNN import KNN
+import seaborn as sns
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -60,3 +61,8 @@ plt.figure('多维度-andrews_curves')
 plt.title('andrews_curves')
 andrews_curves(data, 'Class', color=['y', 'r','c'])
 plt.savefig("./Pictures/raw_andrews_curves.png") # 保存原始数据分布图
+
+plt.figure('热力图-heatmap')
+corr = data.corr()
+sns.heatmap(corr,annot = True)
+plt.savefig("./Pictures/raw_heatmap.png")
