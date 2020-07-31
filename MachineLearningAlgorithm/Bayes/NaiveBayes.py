@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from MachineLearningAlgorithm.Bayes.WordStatistic import *
 
 class NaiveBayesClassifier(object) :
 
@@ -39,6 +40,32 @@ class NaiveBayesClassifier(object) :
 
         return np.array(res)
 
+    def visualize(self, ssler) :
+
+        dicts = ssler.phrase_position
+
+        totall = np.zeros(shape = (len(dicts)))
+
+        for i in self.ratio :
+
+            totall += self.ratio[i]
+
+        for i in self.ratio :
+
+            temp = self.ratio[i] / totall
+
+            top = np.argsort(-temp)[0:len(temp) // 10]
+
+            word = {}
+
+            for j in top:
+
+                key = list(dicts.keys())[list(dicts.values()).index(j)]
+
+                word[key] = self.ratio[i][dicts[key]]
+
+            print(wordcloudSpawn(word))
+
     @staticmethod
     def caculate(features, labels, lam) : 
 
@@ -62,6 +89,6 @@ class NaiveBayesClassifier(object) :
 
         return feat_res, label_res
 
-            
+
 
 

@@ -1,7 +1,47 @@
 import re
 import jieba
 import jieba.analyse
+from random import *
+from wordcloud import *
+import matplotlib.pyplot as plt
+from io import BytesIO
+from base64 import *
 
+def random_color_func(word=None, font_size=None, position=None, orientation=None, font_path=None, random_state=None):
+    r = randint(0, 100)
+    g = randint(100, 255)
+    b = randint(100, 255)
+    return "rgb({0}, {1}, {2})".format(r, g, b)
+
+def wordcloudSpawn(dicts) :
+
+    cloud = WordCloud(
+
+        background_color='white',
+        max_words=1000,
+        # 最大号字体，如果不指定则为图像高度
+        max_font_size=100,
+        # 画布宽度和高度，如果设置了mask则不会生效
+        # 词语水平摆放的频率，默认为0.9.即竖直摆放的频率为0.1
+        prefer_horizontal=0.8,
+
+        color_func = random_color_func
+    )
+    cloud.generate_from_frequencies(frequencies=dicts)
+
+    save_file = BytesIO()
+
+    plt.axis('off')
+
+    plt.imshow(cloud)
+
+    plt.savefig(save_file, format='png')
+
+    b64 = b64encode(save_file.getvalue()).decode('utf8')
+
+    # plt.show()
+
+    return str(b64)
 
 def stopwordslist(path):
 
@@ -13,7 +53,7 @@ def stopwordslist(path):
 
     return stopwords
 
-stopword = stopwordslist('stop_words.txt')
+stopword = stopwordslist('../MachineLearningAlgorithm/Bayes/stop_words.txt')
 
 def text_format(text):
 
