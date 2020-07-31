@@ -1,0 +1,103 @@
+* {
+    padding:0;
+    margin:0;
+    font-family: arial;
+    color:#3c3c3c;
+}
+
+a {
+    text-decoration:none;
+}
+
+ul,
+li {
+    list-style:none;
+}
+
+.fl {
+    float:left;
+}
+
+.fr {
+    float:right;
+}
+
+.clearfix::after {
+    content:"";
+    display:block;
+    clear:both;
+}
+
+img {
+    border:none;
+    vertical-align:middle;
+    /* eg.div引入img下端会有空隙，加这就不会 */
+}
+
+textarea {
+    resize: none;
+    outline: none;
+}
+
+.layer {
+    width:1200px;
+    margin:0 auto;
+}
+
+table {
+    /* 边框模式 ：合并*/
+    border-collapse: collapse;
+}
+
+input,
+button {
+    outline:none;
+}
+
+i {
+    font-style:normal;
+}
+
+em {
+    font-style: normal;
+}
+
+.reds{
+    /* background-color: red; */
+    background-image: linear-gradient(to right, red, orange);
+}
+
+.oranges {
+    /* background-color: orange; */
+    background-image: linear-gradient(to right, orange, yellow);
+}
+
+.yellows {
+    /* background-color: yellow; */
+    background-image: linear-gradient(to right, yellow, green);
+}
+
+.greens {
+    /* background-color: green; */
+    background-image: linear-gradient(to right, green, skyblue);
+}
+
+.sky {
+    /* background-color: skyblue; */
+    background-image: linear-gradient(to right, skyblue, blue);
+}
+
+.blues {
+    /* background-color: blue; */
+    background-image: linear-gradient(to right, blue, purple);
+}
+
+.purples {
+    /* background-color: purple; */
+    background-image: linear-gradient(to right, purple, brown);
+}
+
+.browns {
+    /* background-color: brown; */
+    background-image: linear-gradient(to right, brown, red);
+}
