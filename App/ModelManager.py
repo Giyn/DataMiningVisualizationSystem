@@ -33,7 +33,7 @@ def LinearRegressionTraining(x, y) :
 
     x = ssler.transform(x)
 
-    x = x.reshape(len(x))
+    print(x)
 
     model.fit(x, y)
 

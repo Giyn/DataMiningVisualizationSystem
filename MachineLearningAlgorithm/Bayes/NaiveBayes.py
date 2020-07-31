@@ -44,6 +44,8 @@ class NaiveBayesClassifier(object) :
 
         dicts = ssler.phrase_position
 
+        res = []
+
         totall = np.zeros(shape = (len(dicts)))
 
         for i in self.ratio :
@@ -64,7 +66,9 @@ class NaiveBayesClassifier(object) :
 
                 word[key] = self.ratio[i][dicts[key]]
 
-            print(wordcloudSpawn(word))
+            res.append(wordcloudSpawn(word))
+
+        return res
 
     @staticmethod
     def caculate(features, labels, lam) : 

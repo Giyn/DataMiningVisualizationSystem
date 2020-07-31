@@ -53,7 +53,10 @@ def stopwordslist(path):
 
     return stopwords
 
-stopword = stopwordslist('../MachineLearningAlgorithm/Bayes/stop_words.txt')
+import  os
+print(os.getcwd())
+
+stopword = stopwordslist('MachineLearningAlgorithm/Bayes/stop_words.txt')
 
 def text_format(text):
 

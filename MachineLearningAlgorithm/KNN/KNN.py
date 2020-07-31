@@ -1,3 +1,5 @@
+import base64
+
 import pandas as pd
 import numpy as np
 from pandas import DataFrame
@@ -168,3 +170,26 @@ class KNN:
         # plt.savefig("./Pictures/result.png")  # 保存原始数据分布图
 
         return y_p
+
+
+    def visualize(self, ssler) :
+
+        res = []
+
+        paths = ["MachineLearningAlgorithm/KNN/Pictures/raw_andrews_curves.png",
+                "MachineLearningAlgorithm/KNN/Pictures/raw_heatmap.png",
+                "MachineLearningAlgorithm/KNN/Pictures/raw_parallel_coordinates.png",
+                "MachineLearningAlgorithm/KNN/Pictures/raw_radviz.png",
+                "MachineLearningAlgorithm/KNN/Pictures/raw_scatter.png",
+                "MachineLearningAlgorithm/KNN/Pictures/result.png"]
+
+        for pa in paths :
+
+            with open(pa, 'rb') as f:
+                data = base64.b64encode(f.read())
+
+            print(str(data))
+
+            res.append(str(data))
+
+        return res

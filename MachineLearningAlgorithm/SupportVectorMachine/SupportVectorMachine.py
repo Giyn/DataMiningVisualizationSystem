@@ -1,3 +1,5 @@
+import base64
+
 import numpy as np
 import cvxopt
 # import matplotlib.pyplot as plt
@@ -93,6 +95,26 @@ class SVM:
             self.intercept -= self.lagr_multipliers[i] * self.support_vectors_labels[i] *\
                               self.kernel(self.support_vectors[i], self.support_vectors[0])
         y[y == -1] = 0
+
+    def visualize(self, ssler) :
+
+        res = []
+
+        paths = ["MachineLearningAlgorithm/SupportVectorMachine/Pictures/dimension1.png",
+                "MachineLearningAlgorithm/SupportVectorMachine/Pictures/dimension2.png",
+                "MachineLearningAlgorithm/SupportVectorMachine/Pictures/dimension3.png",
+                "MachineLearningAlgorithm/SupportVectorMachine/Pictures/show.png"]
+
+        for pa in paths :
+
+            with open(pa, 'rb') as f:
+                data = base64.b64encode(f.read())
+
+            print(str(data))
+
+            res.append(str(data))
+
+        return res
 
     def predict(self, X_text):
         y_predict = []

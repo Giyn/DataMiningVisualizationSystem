@@ -152,8 +152,6 @@ def fit() :
 
             x, y = DataFrame2NPArray(dataSet, target)
 
-            x = x.reshape(len(x))
-
             model, ssler = LinearRegressionTraining(x, y)
 
         elif(model == 5) :
@@ -178,11 +176,9 @@ def fit() :
 
             x = ssler.transform(dataSet, textColumn)
 
-        cv_score = cross_validation(model, x, y, 10)
+        cv_score = cross_validation(model, x, y, 2)
 
         key = pushModel(model, ssler)
-
-        reg_ass = reg_assessment(model.predict(x), y)
 
         res = {
 
@@ -190,15 +186,9 @@ def fit() :
 
             "cv_score" : cv_score,
 
-            "MSE" : reg_ass.MSE(),
+            "status_code" : 200,
 
-            "MAE" : reg_ass.MAE(),
-
-            "RMSE" : reg_ass.RMSE(),
-
-            "RS" : reg_ass.R_square(),
-
-            "status_code" : 200
+            "images" : model.visualize(ssler)
 
         }
 
