@@ -5,3 +5,5 @@ matplotlib
 jieba
 sklearn
 cvxopt
+seaborn
+wordcloud

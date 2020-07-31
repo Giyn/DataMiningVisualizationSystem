@@ -14,6 +14,8 @@ from App.utils import *
 from App.PoolManager import *
 from App.ModelManager import *
 from MachineLearningAlgorithm.Bayes.NaiveBayes import *
+from model_assessment.divide_data import *
+from model_assessment.reg import *
 
 set_option('display.max_columns', None)
 
@@ -94,8 +96,6 @@ def pretreatment() :
 
         hashKey = str(hash(dataSet))
 
-        print(df)
-
         pushDataSet(df, discrete, textColumn, hashKey)
 
         if("Unnamed: 0" in df.columns) : df = dropColumns(df, columns = ["Unnamed: 0"])
@@ -113,7 +113,7 @@ def fit() :
 
         data = json.loads(str(request.data, 'utf-8'))
 
-        dataSet, discrete, textColumns = pullDataSet(str(data['hashKey']))
+        dataSet, discrete, textColumn = pullDataSet(str(data['hashKey']))
 
         model = -1
 
@@ -121,20 +121,20 @@ def fit() :
 
         target = ''
 
-        if(dataSet is None) : return '{"msg" : "数据已过期"}'
+        if(dataSet is None) : return '{"status_code" : 403,"msg" : "数据已过期"}'
 
         if('model' in data) : model = data['model']
 
-        if(model <= 0 or model > 6) : return '{"msg" : "模型种类无效"}'
+        if(model <= 0 or model > 6) : return '{"status_code" : 403,"msg" : "模型种类无效"}'
 
         if('target' in data and data['target'] in dataSet.columns): target = data['target']
-        else : return '{"msg" : "标签无效"}'
+        else : return '{"status_code" : 403,"msg" : "标签无效"}'
 
         if(model == 1) :
 
-            y = dataSet[target]
+            y = np.array(dataSet[target])
 
-            model, ssler = NBayesTraining(dataSet, y, textColumns)
+            model, ssler = NBayesTraining(dataSet, y, textColumn)
 
         elif(model == 2) :
 
@@ -152,8 +152,6 @@ def fit() :
 
             x, y = DataFrame2NPArray(dataSet, target)
 
-            x = x.reshape(len(x))
-
             model, ssler = LinearRegressionTraining(x, y)
 
         elif(model == 5) :
@@ -168,9 +166,33 @@ def fit() :
 
             model, ssler = CART_REGTraining(x, y)
 
+        if(not isinstance(model, NaiveBayesClassifier)) :
+
+            x, y = DataFrame2NPArray(dataSet, target)
+
+            x = ssler.transform(x)
+
+        else :
+
+            x = ssler.transform(dataSet, textColumn)
+
+        cv_score = cross_validation(model, x, y, 2)
+
         key = pushModel(model, ssler)
 
-        return str(key)
+        res = {
+
+            "hashKey" : str(key),
+
+            "cv_score" : cv_score,
+
+            "status_code" : 200,
+
+            "images" : model.visualize(ssler)
+
+        }
+
+        return jsonify(res)
 
     return '<h1>请使用POST方法访问</h1>'
 

@@ -4,6 +4,7 @@ Created on Tue Jul 28 04:14:56 2020
 
 @author: 许继元
 """
+import base64
 
 import numpy as np
 from .metrics import accuracy_score
@@ -85,6 +86,28 @@ class LogisticRegression:
 
         y_predict = self.predict(X_test)
         return accuracy_score(y_test, y_predict)
+
+    def visualize(self, ssler) :
+
+        res = []
+
+        paths = ["MachineLearningAlgorithm/LogisticRegression/Pictures/feature_relative.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_andrews_curves.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_parallel_coordinates.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_radviz.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_scatter.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/result.png"]
+
+        for pa in paths :
+
+            with open(pa, 'rb') as f:
+                data = base64.b64encode(f.read())
+
+            print(str(data))
+
+            res.append(str(data))
+
+        return res
 
     def __repr__(self):
         return "LogisticRegression()"

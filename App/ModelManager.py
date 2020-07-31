@@ -3,7 +3,7 @@ from MachineLearningAlgorithm.LinearRegression.ML.LinearRegression import *
 from MachineLearningAlgorithm.SupportVectorMachine.SupportVectorMachine import *
 from MachineLearningAlgorithm.ClassificationAndRegressionTree.CART import *
 from MachineLearningAlgorithm.Bayes.NaiveBayes import *
-from MachineLearningAlgorithm.knn.knn import *
+from MachineLearningAlgorithm.KNN.KNN import *
 from sklearn.preprocessing import StandardScaler
 from MachineLearningAlgorithm.Bayes.TextAnalyzer import *
 
@@ -33,7 +33,7 @@ def LinearRegressionTraining(x, y) :
 
     x = ssler.transform(x)
 
-    x = x.reshape(len(x))
+    print(x)
 
     model.fit(x, y)
 
@@ -56,24 +56,6 @@ def SVMTraining(x, y) :
     print((model.predict(x) == y).sum() / len(y))
 
     return model, ssler
-
-# def CART_CLFTraining(x, y) :
-#
-#     model = DecisionTree_CART(tree_type='clf')
-#
-#     ssler = StandardScaler()
-#
-#     ssler.fit(x)
-#
-#     x = ssler.transform(x)
-#
-#     print(x)
-#
-#     print(y)
-#
-#     model.fit(x, y)
-#
-#     return model, ssler
 
 def CART_REGTraining(x, y) :
 
@@ -99,7 +81,7 @@ def KNNTraining(x, y) :
 
     x = ssler.transform(x)
 
-    model = knn(x, y)
+    model = KNN(x, y)
 
     print(model.fit(x, y))
 

@@ -4,6 +4,7 @@ Created on Tue Jul 28 22:04:40 2020
 
 @author: 许继元
 """
+import base64
 
 import numpy as np
 from .metrics import r2_score # 一个点表示当前目录
@@ -23,7 +24,7 @@ class LinearRegression(object):
         :param X_train:
         :return:
         """
-        assert X_train.ndim == 1 and y_train.ndim == 1, 'X和Y必须为1维'
+        X_train = X_train.reshape(len(X_train))
         assert len(X_train) == len(y_train), 'X和Y的训练个数不相同'
         x_mean = np.mean(X_train)
         y_mean = np.mean(y_train)
@@ -46,7 +47,6 @@ class LinearRegression(object):
         :param X_test:
         :return:
         """
-        assert X_test.ndim == 1, 'X_test必须是一维数组'
         assert self.a_ is not None and self.b_ is not None , '在predict之前请先fit'
 
         y_pridect = [self._predict(x) for x in X_test]
@@ -58,6 +58,29 @@ class LinearRegression(object):
         y_predict = self.predict(x_test)
         return r2_score(y_test, y_predict)
 
+    def visualize(self, ssler) :
+
+        res = []
+
+        paths = ["MachineLearningAlgorithm/LinearRegression/Pictures/raw_1.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_2.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_3.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_4.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/result_1.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/result_2.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/result_3.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/result_4.png"]
+
+        for pa in paths :
+
+            with open(pa, 'rb') as f:
+                data = base64.b64encode(f.read())
+
+            print(str(data))
+
+            res.append(str(data))
+
+        return res
 
     def __repr__(self):
         return 'LinearRegression(a=%s, b=%s)' %(self.a_, self.b_)

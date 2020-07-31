@@ -1,3 +1,6 @@
+import base64
+import os
+
 import numpy as np
 # import pandas as pd
 # from sklearn.preprocessing import LabelEncoder
@@ -133,6 +136,25 @@ class DecisionTree_CART:
         res = np.empty(m)
         for i in range(m):
             res[i] = self._predict(X_test[i])
+        return res
+
+    def visualize(self, ssler) :
+
+        res = []
+
+        paths = ["MachineLearningAlgorithm/ClassificationAndRegressionTree/Picture/long.png",
+                "MachineLearningAlgorithm/ClassificationAndRegressionTree/Picture/short.png",
+                "MachineLearningAlgorithm/ClassificationAndRegressionTree/Picture/show.png"]
+
+        for pa in paths :
+
+            with open(pa, 'rb') as f:
+                data = base64.b64encode(f.read())
+
+            print(str(data))
+
+            res.append(str(data))
+
         return res
 
 def load_data(data, bin=None):

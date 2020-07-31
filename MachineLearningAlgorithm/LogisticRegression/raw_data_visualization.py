@@ -7,6 +7,7 @@ Created on Tue Jul 28 04:18:27 2020
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import seaborn as sns
 from pandas.plotting import parallel_coordinates
 from pandas.plotting import radviz
 from pandas.plotting import andrews_curves
@@ -48,3 +49,15 @@ plt.figure('多维度-andrews_curves')
 plt.title('andrews_curves')
 andrews_curves(data, 'Class', color=['pink', 'gold'])
 plt.savefig("./Pictures/raw_andrews_curves.png") # 保存原始数据分布图
+
+# 特征相关性热力图
+data = pd.read_csv(r"iris.csv")
+data = data.iloc[:,[0,1,2,3]]
+
+def heat_map(df):
+    data = df.corr()
+    plt.subplots(figsize=(6, 6)) # 设置画面大小
+    sns.heatmap(data, annot=True, vmax=1, square=True, cmap="Blues")
+    plt.savefig('./Pictures/feature_relative.png')
+
+heat_map(data)
