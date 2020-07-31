@@ -1,1 +1,7 @@
 flask
+pandas
+numpy
+matplotlib
+jieba
+sklearn
+cvxopt
