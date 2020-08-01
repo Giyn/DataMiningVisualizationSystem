@@ -95,8 +95,10 @@ class LogisticRegression:
                 "MachineLearningAlgorithm/LinearRegression/Pictures/raw_andrews_curves.png",
                 "MachineLearningAlgorithm/LinearRegression/Pictures/raw_parallel_coordinates.png",
                 "MachineLearningAlgorithm/LinearRegression/Pictures/raw_radviz.png",
-                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_scatter.png",
-                "MachineLearningAlgorithm/LinearRegression/Pictures/result.png"]
+                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_scatter_1.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_scatter_2.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/result_1.png",
+                "MachineLearningAlgorithm/LinearRegression/Pictures/result_2.png"]
 
         for pa in paths :
 
