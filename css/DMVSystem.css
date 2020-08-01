@@ -75,9 +75,11 @@ body {
     width: 250px;
     height: 60px;
     line-height: 60px;
-    text-align: center;
+    text-indent: -1000px;
     background-color: #fff;
     border-right: 1px solid #d1cece;
+    background-image: url(../images/DMVS.png);
+    background-size: 100% 100%;
 }
 
 #firstScreen .sidebar {
@@ -222,6 +224,7 @@ body {
 
 #firstScreen .rightbox .data p {
     color: #918f8f;
+    height: 42px;
 }
 
 #firstScreen .rightbox .data span {
@@ -427,6 +430,12 @@ body {
 }
 
 #firstScreen .rightbox .process li:hover {
+    color: #fff;
+    background-color: #5A8DF8;
+}
+
+#firstScreen .rightbox .process #assess {
+    margin-left: 30px;
     color: #fff;
     background-color: #5A8DF8;
 }

@@ -146,13 +146,15 @@ def fit() :
 
         model = -1
 
+        model_id = 0
+
         ssler = None
 
         target = ''
 
         if(dataSet is None) : return '{"status_code" : 403,"msg" : "数据已过期"}'
 
-        if('model' in data) : model = data['model']
+        if('model' in data) : model_id = model = data['model']
 
         if(model <= 0 or model > 6) : return '{"status_code" : 403,"msg" : "模型种类无效"}'
 
@@ -205,7 +207,7 @@ def fit() :
 
             x = ssler.transform(dataSet, textColumn)
 
-        cv_score = cross_validation(model, x, y, 2)
+        cv_score = cross_validation(model, x, y, 2, model_id != 5 and model_id > 3)
 
         key = pushModel(model, ssler)
 

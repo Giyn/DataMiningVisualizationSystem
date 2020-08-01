@@ -639,6 +639,13 @@ function LineOption(series,classes,obj){
 //从后端拿对应的数据源
 var source = document.getElementById('source').getElementsByTagName('span');
 
+var filename = document.getElementById('source').getElementsByTagName('h3');
+
+//数据集简介
+var fileIntroduct = document.getElementById('source').getElementsByTagName('p');
+
+
+
 for(var i = 0; i < source.length; i++){
     source[i].index = i;
     source[i].onclick = function(){
@@ -660,6 +667,9 @@ for(var i = 0; i < source.length; i++){
 
 
         }
+
+        //显示加载
+        LoadingPic.style.display = 'block';
         
         source[this.index].innerHTML = "正在导入";
 
@@ -669,6 +679,9 @@ for(var i = 0; i < source.length; i++){
 
         var index = source[this.index];
 
+        document.getElementById('fileName').innerHTML = filename[this.index].innerHTML;
+
+        document.getElementById('fileSay').innerHTML = fileIntroduct[this.index].innerHTML;
 
         //发送请求
         var xmlhttp = new XMLHttpRequest();
@@ -709,6 +722,11 @@ for(var i = 0; i < source.length; i++){
         
                 index.style.backgroundColor = 'rgba(117, 218, 173,0.2)';
 
+                //隐藏图片
+                LoadingPic.style.display = 'none';
+
+                alert("数据加载完毕，前往‘可视化’查看");
+
             }
         }
     }
@@ -716,160 +734,6 @@ for(var i = 0; i < source.length; i++){
 
 
 
-//要导入数据集后的操作
-// for(var i = 0; i < source.length; i++){
-//     source[i].index = i;
-//     source[i].onclick = function(){
-        
-
-//         // if(!data){
-//         //     alert('请选择文件');
-//         //     return;
-//         // }
-//         state = true;
-
-//         source[this.index].innerHTML = "已导入";
-
-//         source[this.index].style.color = '#75DAAD';
-
-//         source[this.index].style.backgroundColor = 'rgba(117, 218, 173,0.2)';
-        
-//         for(var i = 0; i < source.length; i++){
-//             source[i].onclick = null;
-//         }
-
-//         var submitdata = {
-
-//             dataSet: data,
-
-//             sep: ","
-
-//         };
-
-//         //显示加载
-//         LoadingPic.style.display = 'block';
-
-
-//         //发送请求
-//         var xmlhttp = new XMLHttpRequest();
-
-//         xmlhttp.open("POST",serverAddress + "/api-DataFrame",true);
-
-//         xmlhttp.setRequestHeader("Content-type","application/json");
-
-//         xmlhttp.send(JSON.stringify(submitdata));
-
-//         xmlhttp.onreadystatechange = function() {
-
-//             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                
-//                 dataSet = eval(xmlhttp.responseText);
-
-//                 dataSet_string = xmlhttp.responseText;
-
-//                 fit_target = dataSet[0][dataSet[0].length - 1];
-
-//                 createTable(dataSet);
-
-//                 //隐藏图片
-//                 LoadingPic.style.display = 'none';
-          
-
-//                 alert("数据加载完毕，前往‘可视化’查看");
-
-//                 var rows_length = dataSet.length, 
-//                     columns_length = dataSet[0].length;
-
-//                 for(var i = 0; i < chartList.length; i++){
-//                     chartList[i].index = i;
-//                     chartList[i].onclick = function(){
-//                         clearName(chartList);
-//                         chartList[this.index].className = 'active';
-//                         var classes = findClass(dataSet,columns_length - 1);
-//                         // document.getElementById('chartShow').innerHTML = '';
-//                        if(this.index == 0){
-//                            //散点
-//                             var obj = RandomScatter(dataSet,classes);
-                           
-//                             var series = ScatterSeries(dataSet,classes,obj);
-                          
-//                             var option = ScatterOption(series,classes,obj);
-//                        } else if(this.index == 1){
-//                            //折线
-//                            var obj = RandomScatter(dataSet,classes);
-//                             for(var i = 0; i < classes.length; i++){
-                                
-//                                 var name = classes[i];
-//                                 // console.log(obj[name]);
-//                                 obj[name].sort(function(a, b){
-//                                     var value1 = a[0];
-//                                     var value2 = b[0];
-//                                     return value1 - value2;
-//                                 });
-//                             }
-//                             var series = LineSeries(classes,obj);
-//                             var option = LineOption(series,classes,obj);
-
-//                        } else if(this.index == 2){
-//                             //条形
-
-//                             var arr = CalPercent(dataSet,classes);
-
-//                             var option = BarOption(arr,classes);
-//                         } else if(this.index == 3){
-//                             //饼状
-
-//                             var arr = CalPercent(dataSet,classes);
-
-//                             var data = CreateParData(arr, classes);
-
-//                             var option = ParOption(data);
-//                         } else if(this.index == 4){
-//                             //平行坐标
-                                            
-//                             var parallelAxis = createParallelAxis(dataSet);
-
-//                             var series = createParallelSeries(dataSet, classes);
-
-//                             var option = ParallelOption(classes,parallelAxis,series);
-                       
-//                         } else if(this.index == 5){
-//                             //雷达图
-
-//                             var sum = radViz(dataSet, 1, classes);
-
-//                             var series = RadVizSeries(classes, sum);
-                          
-//                             for(var fe in sum.features) {
-
-//                                 series.push({
-//                                            name: dataSet[0][parseInt(fe) + 1],
-//                                            type:'scatter',
-//                                            data: [sum.features[parseInt(fe)]]        
-//                                        });
-//                                 classes.push(dataSet[0][parseInt(fe) + 1]);
-//                             }
-//                             var option = creatRadVizOption(series,classes);
-
-//                        } else if(this.index == 6){
-//                            //傅里叶 
-                           
-//                             if(classes > 20) return;
-//                             var series = ASeries(dataSet, classes);
-//                             var option = AndrewOption(classes,series);
-//                        } else {
-//                            var option = {};
-//                        }
-        
-//                         var myChart = echarts.init(document.getElementById('chartShow'),'light');
-                        
-//                         myChart.setOption(option,true);     
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
 
 //获取图表选择
 var chartList = document.getElementById('chartList').getElementsByTagName('li');
@@ -885,6 +749,15 @@ for(var i = 0; i < chartList.length; i++){
         chartList[this.index].className = 'active';
         var classes = findClass(dataSet,columns_length - 1);
         // document.getElementById('chartShow').innerHTML = '';
+        if(classes.length > 6){
+            for(var j = 0; j < rows_length; j++){
+                
+                dataSet[j].push('one');
+                
+            }
+            classes = ['one'];
+        }
+
         if(this.index == 0){
             //散点
             var obj = RandomScatter(dataSet,classes);
@@ -1213,6 +1086,10 @@ process[1].onclick = function() {
 
             model_hashKey = data["hashKey"];
 
+            var str = '模型评估参数：' + data.cv_score;
+
+            document.getElementById('assess').innerHTML = str;
+
         } 
          //加载隐藏
          LoadingPic.style.display = 'none';
@@ -1234,7 +1111,7 @@ function CreatImg(arr){
 //点击预测
 process[2].onclick = function() {
 
-    alert("FREE版还不能进行预测，请尝试我们的PRO版。")
+    alert("FREE版还不能进行预测，请尝试我们的PRO版。^_^")
 
     return
 
@@ -1278,7 +1155,7 @@ for(var i = 0;i < funcList.length;++i) {
 
     funcList[i].onclick = function() {
 
-        alert("FREE版还不能选择算法，请尝试我们的PRO版。")
+        alert("FREE版还不能选择算法，请尝试我们的PRO版。^_^")
 
     };
 

@@ -1,5 +1,6 @@
 import numpy as np
 import copy
+from App.utils import *
 
 def train_test_split(X, y, test_ratio, seed=None): # 留出法
     """
@@ -21,7 +22,7 @@ def train_test_split(X, y, test_ratio, seed=None): # 留出法
     y_test = np.array([y[i] for i in shuffled_test])
     return X_train, X_test, y_train, y_test
 
-def cross_validation(algorihm, X, y, n): #交叉验证法
+def cross_validation(algorihm, X, y, n, isReg): #交叉验证法
     """
     :param algorihm: 传入算法的类
     :param X: 特征集
@@ -30,7 +31,11 @@ def cross_validation(algorihm, X, y, n): #交叉验证法
     :return:
     """
     def accuracy_score(y_true, y_predict): # 计算准确率
-        return np.sum(y_true == y_predict) / len(y_true)
+
+        if(isReg) :
+            return np.sqrt(np.sum(np.power(y_true - y_predict, 2.0)) / len(y_true))
+        else :
+            return np.sum(y_true == y_predict) / len(y_true)
     all = np.random.permutation(len(X)) #打乱索引
     size = len(X) // n
     # 根据n把数据分成n部分
