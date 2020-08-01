@@ -31,6 +31,35 @@ CORS(app)
 def hello_world():
     return 'Hello, World!'
 
+@app.route('/api-getDataSet', methods = ['POST', 'GET'])
+def getDataSet():
+
+    if request.method == 'POST':
+
+        data = json.loads(str(request.data, 'utf-8'))
+
+        path = ["MachineLearningAlgorithm/Bayes/spam_ham_dataset.csv",
+            "MachineLearningAlgorithm/KNN/tree.csv",
+            "MachineLearningAlgorithm/SupportVectorMachine/cancer.csv",
+            "MachineLearningAlgorithm/LinearRegression/housing.csv",
+            "MachineLearningAlgorithm/LogisticRegression/iris.csv",
+            "MachineLearningAlgorithm/ClassificationAndRegressionTree/forestfire1.csv"
+                ]
+
+        with open(path[data], 'r') as f:
+
+            text = StringIO(f.read())
+
+        df = read_csv(text, sep=',')
+
+        if ("Unnamed: 0" in df.columns): df = dropColumns(df, columns=["Unnamed: 0"])
+
+        res = DataFrame2Array(df)
+
+        return str(res)
+
+    return '<h1>请使用POST方法访问</h1>'
+
 @app.route('/api-DataFrame', methods = ['POST', 'GET'])
 def dataFrame() :
 

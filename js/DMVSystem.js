@@ -9,6 +9,15 @@ var pageIntroduct = document.getElementById('page-introduct');
 //表示状态，有无导入数据源
 var state = false;
 
+
+//服务器地址
+var serverAddress = "http://120.76.139.47:8000";
+
+
+ //获取显示加载图片
+ var LoadingPic = document.getElementById('LoadingPic');
+
+
 //搜索区域
 var searchPart = document.getElementById('searchPart');
 
@@ -19,31 +28,61 @@ for(var m = 1; m < nav.length; m++){
 }
 
 
+
 //读取文件
 var file1 = document.getElementById('file1');
 
 
+
 var data = "";
 
-file1.onchange = function(){
 
-    var file = file1.files[0];
 
-    var filename = file.name;
+//根据这个来请求
+var num;
 
-    document.getElementById('fileName').innerHTML = filename;
+// var file = document.getElementById('source').getElementsByTagName('input');
 
-    var reader = new FileReader();
 
-    reader.readAsText(file,'utf-8');
 
-    reader.onload = function(){
+// file1.onchange = function(){
 
-        data = reader.result;
+//     var file = file1.files[0];
 
-    }
+//     var filename = file.name;
+
+
+//     if(filename == 'iris.csv'){
+//         num = 1;
+//     } else if(filename == 'tree.csv'){
+//         num = 2;
+//     } else if(filename == 'cancer.csv'){
+//         num = 3;
+//     } else if(filename == 'housing.csv'){
+//         num = 4;
+//     } else if(filename == 'forestfires.csv'){
+//         num = 5;
+//     } else if(filename == 'spam_ham_dataset.csv'){
+//         num = 6;
+//     } else {
+//         num = 0;
+//     }
+
+//     document.getElementById('fileName').innerHTML = filename;
+
+//     var reader = new FileReader();
+
+
+//     reader.readAsText(file,'utf-8');
+
+//     reader.onload = function(){
+
+//         data = reader.result;
+
+//     }
     
-}
+// }
+
 
 //找类名
 function findClass(dataSet, pos) {
@@ -81,15 +120,13 @@ function createParallelAxis(dataSet){
 function IsColor(arr,classes){
     var len = arr.length;
     var colors = [
-        "#6C6C6C", "#AE0000", "#f079b4","#f00bf0", "#8600FF",
-        "#2828FF", "#0072E3", "#00CACA", "#02DF82", "#00DB00", 
-        "#82D900", "#e0e008", "#C6A300", "#f17f0d", "#D94600", 
-        "#a05959", "#949449",  "#4F9D9D", "#5ba3a3", "#9F4D95"
+        "#5B8FF9", "#5AD8A6", "#5D7092","#F6BD16", "#E8684A",
+        "#6DC8EC", "#9270CA", "#FF9D4D", "#FF9D4D", "#FF99C3", 
     ];
 
     var basic = Math.floor(Math.random()*colors.length);
 
-    var color = colors[(basic + classes.indexOf(arr[len - 1])) % 20];
+    var color = colors[(basic + classes.indexOf(arr[len - 1])) % 10];
 
     return color;
 }
@@ -122,6 +159,9 @@ function createParallelSeries(dataSet, classes){
         series.push({
             name: classes[i],
             type: 'parallel',
+            // itemStyle: {
+            //     color: IsColor(dataSet[i], classes)
+            // },
             data: feature[classes[i]]
         });
     }
@@ -134,7 +174,7 @@ function createParallelSeries(dataSet, classes){
 function ParallelOption(classes,parallelAxis,series){
     var option = {
         title: {
-            text:'平行坐标系',
+            text:'平行坐标图',
             left:'center'
         },
         legend: {
@@ -337,7 +377,7 @@ function Andrews(data, l, h, accuracy){
 function AndrewOption(classes,series){
     var option = {
         title:{
-            text:'傅里叶图',
+            text:'Andrew图',
             left:'center'
         },
        legend: {
@@ -363,12 +403,11 @@ function AndrewOption(classes,series){
 function ASeries(dataSet, classes) {
 
     // var colors = [
-    //     "#6C6C6C", "#AE0000", "#f079b4","#f00bf0", "#8600FF",
-    //     "#2828FF", "#0072E3", "#00CACA", "#02DF82", "#00DB00", 
+    //     "#5B8FF9", "#5AD8A6", "#5D7092","#F6BD16", "#E8684A",
+    //     "#6DC8EC", "#9270CA", "#FF9D4D", "#FF9D4D", "#FF99C3", 
+    // ];
     //     "#82D900", "#e0e008", "#C6A300", "#f17f0d", "#D94600", 
     //     "#a05959", "#949449",  "#4F9D9D", "#5ba3a3", "#9F4D95"
-    // ];
-
     var series = [];
 
     var len = dataSet[0].length;
@@ -385,7 +424,17 @@ function ASeries(dataSet, classes) {
                 data: Andrews(dataSet[i], -Math.PI, Math.PI, 0.1),
 
                 // itemStyle: {
-                //     color: colors[(basic + classes.indexOf(dataSet[i][len - 1])) % 20]
+                    
+                //     color:function(params){
+
+                //         var colors = [
+                //             "#5B8FF9", "#5AD8A6", "#5D7092","#F6BD16", "#E8684A",
+                //             "#6DC8EC", "#9270CA", "#FF9D4D", "#FF9D4D", "#FF99C3", 
+                //         ];
+                //         return colors[params.dataIndex];
+
+                //     }
+                //     // color: colors[(basic + classes.indexOf(dataSet[i][len - 1])) % 10]
                 // }
             };
 
@@ -431,10 +480,7 @@ function BarOption(arr,classes){
         },
         series:[{
             data: arr,
-            type:'bar',
-            itemStyle:{
-                color: '#a770f0'
-            }
+            type:'bar'
         }]
     
     }
@@ -585,46 +631,49 @@ function LineOption(series,classes,obj){
     return option;
 }
 
-var chartList = document.getElementById('chartList').getElementsByTagName('li');
 
 
-//每个数据源的导入
+
+
+
+//从后端拿对应的数据源
 var source = document.getElementById('source').getElementsByTagName('span');
 
-
-//要导入数据集后的操作
 for(var i = 0; i < source.length; i++){
     source[i].index = i;
     source[i].onclick = function(){
 
-        if(!data){
-            alert('请选择文件');
-            return;
-        }
+
         state = true;
 
-        source[this.index].innerHTML = "已导入";
+        num = this.index;
+
+        var submitdata = this.index;
+
+        for(var i = 0; i < source.length; i++) {
+
+            source[i].innerHTML = "导入数据集";
+
+            source[i].style.backgroundColor = '#F9D56E';
+
+            source[i].style.color = '#000000';
+
+
+        }
+        
+        source[this.index].innerHTML = "正在导入";
 
         source[this.index].style.color = '#75DAAD';
 
-        source[this.index].style.backgroundColor = 'rgba(117, 218, 173,0.2)';
-        
-        for(var i = 0; i < source.length; i++){
-            source[i].onclick = null;
-        }
+        source[this.index].style.backgroundColor = 'rgba(218, 117, 173,0.2)';
 
-        var submitdata = {
+        var index = source[this.index];
 
-            dataSet: data,
-
-            sep: ","
-
-        };
 
         //发送请求
         var xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.open("POST","http://120.76.139.47:8000/api-DataFrame",true);
+        xmlhttp.open("POST",serverAddress + "/api-getDataSet",true);
 
         xmlhttp.setRequestHeader("Content-type","application/json");
 
@@ -640,97 +689,26 @@ for(var i = 0; i < source.length; i++){
 
                 fit_target = dataSet[0][dataSet[0].length - 1];
 
+                for(var j = 0;j < funcList.length;++j) {
+
+                    funcList[j].className = '';
+
+                }
+                
+                funcList[num].className = 'active';
+        
+                fit_model = num + 1;
+
                 createTable(dataSet);
 
-                var rows_length = dataSet.length, 
-                    columns_length = dataSet[0].length;
+                state = true;
+        
+                index.innerHTML = "已导入";
+        
+                index.style.color = '#75DAAD';
+        
+                index.style.backgroundColor = 'rgba(117, 218, 173,0.2)';
 
-                for(var i = 0; i < chartList.length; i++){
-                    chartList[i].index = i;
-                    chartList[i].onclick = function(){
-                        clearName(chartList);
-                        chartList[this.index].className = 'active';
-                        var classes = findClass(dataSet,columns_length - 1);
-                        // document.getElementById('chartShow').innerHTML = '';
-                       if(this.index == 0){
-                           //散点
-                            var obj = RandomScatter(dataSet,classes);
-                           
-                            var series = ScatterSeries(dataSet,classes,obj);
-                          
-                            var option = ScatterOption(series,classes,obj);
-                       } else if(this.index == 1){
-                           //折线
-                           var obj = RandomScatter(dataSet,classes);
-                            for(var i = 0; i < classes.length; i++){
-                                
-                                var name = classes[i];
-                                // console.log(obj[name]);
-                                obj[name].sort(function(a, b){
-                                    var value1 = a[0];
-                                    var value2 = b[0];
-                                    return value1 - value2;
-                                });
-                            }
-                            var series = LineSeries(classes,obj);
-                            var option = LineOption(series,classes,obj);
-
-                       } else if(this.index == 2){
-                            //条形
-
-                            var arr = CalPercent(dataSet,classes);
-
-                            var option = BarOption(arr,classes);
-                        } else if(this.index == 3){
-                            //饼状
-
-                            var arr = CalPercent(dataSet,classes);
-
-                            var data = CreateParData(arr, classes);
-
-                            var option = ParOption(data);
-                        } else if(this.index == 4){
-                            //平行坐标
-                                            
-                            var parallelAxis = createParallelAxis(dataSet);
-
-                            var series = createParallelSeries(dataSet, classes);
-
-                            var option = ParallelOption(classes,parallelAxis,series);
-                       
-                        } else if(this.index == 5){
-                            //雷达图
-
-                            var sum = radViz(dataSet, 1, classes);
-
-                            var series = RadVizSeries(classes, sum);
-                          
-                            for(var fe in sum.features) {
-
-                                series.push({
-                                           name: dataSet[0][parseInt(fe) + 1],
-                                           type:'scatter',
-                                           data: [sum.features[parseInt(fe)]]        
-                                       });
-                                classes.push(dataSet[0][parseInt(fe) + 1]);
-                            }
-                            var option = creatRadVizOption(series,classes);
-
-                       } else if(this.index == 6){
-                           //傅里叶 
-                           
-                            if(classes > 20) return;
-                            var series = ASeries(dataSet, classes);
-                            var option = AndrewOption(classes,series);
-                       } else {
-                           var option = {};
-                       }
-                           
-                        var myChart = echarts.init(document.getElementById('chartShow'),'light');
-                        
-                        myChart.setOption(option,true);     
-                    }
-                }
             }
         }
     }
@@ -738,7 +716,259 @@ for(var i = 0; i < source.length; i++){
 
 
 
+//要导入数据集后的操作
+// for(var i = 0; i < source.length; i++){
+//     source[i].index = i;
+//     source[i].onclick = function(){
+        
+
+//         // if(!data){
+//         //     alert('请选择文件');
+//         //     return;
+//         // }
+//         state = true;
+
+//         source[this.index].innerHTML = "已导入";
+
+//         source[this.index].style.color = '#75DAAD';
+
+//         source[this.index].style.backgroundColor = 'rgba(117, 218, 173,0.2)';
+        
+//         for(var i = 0; i < source.length; i++){
+//             source[i].onclick = null;
+//         }
+
+//         var submitdata = {
+
+//             dataSet: data,
+
+//             sep: ","
+
+//         };
+
+//         //显示加载
+//         LoadingPic.style.display = 'block';
+
+
+//         //发送请求
+//         var xmlhttp = new XMLHttpRequest();
+
+//         xmlhttp.open("POST",serverAddress + "/api-DataFrame",true);
+
+//         xmlhttp.setRequestHeader("Content-type","application/json");
+
+//         xmlhttp.send(JSON.stringify(submitdata));
+
+//         xmlhttp.onreadystatechange = function() {
+
+//             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                
+//                 dataSet = eval(xmlhttp.responseText);
+
+//                 dataSet_string = xmlhttp.responseText;
+
+//                 fit_target = dataSet[0][dataSet[0].length - 1];
+
+//                 createTable(dataSet);
+
+//                 //隐藏图片
+//                 LoadingPic.style.display = 'none';
+          
+
+//                 alert("数据加载完毕，前往‘可视化’查看");
+
+//                 var rows_length = dataSet.length, 
+//                     columns_length = dataSet[0].length;
+
+//                 for(var i = 0; i < chartList.length; i++){
+//                     chartList[i].index = i;
+//                     chartList[i].onclick = function(){
+//                         clearName(chartList);
+//                         chartList[this.index].className = 'active';
+//                         var classes = findClass(dataSet,columns_length - 1);
+//                         // document.getElementById('chartShow').innerHTML = '';
+//                        if(this.index == 0){
+//                            //散点
+//                             var obj = RandomScatter(dataSet,classes);
+                           
+//                             var series = ScatterSeries(dataSet,classes,obj);
+                          
+//                             var option = ScatterOption(series,classes,obj);
+//                        } else if(this.index == 1){
+//                            //折线
+//                            var obj = RandomScatter(dataSet,classes);
+//                             for(var i = 0; i < classes.length; i++){
+                                
+//                                 var name = classes[i];
+//                                 // console.log(obj[name]);
+//                                 obj[name].sort(function(a, b){
+//                                     var value1 = a[0];
+//                                     var value2 = b[0];
+//                                     return value1 - value2;
+//                                 });
+//                             }
+//                             var series = LineSeries(classes,obj);
+//                             var option = LineOption(series,classes,obj);
+
+//                        } else if(this.index == 2){
+//                             //条形
+
+//                             var arr = CalPercent(dataSet,classes);
+
+//                             var option = BarOption(arr,classes);
+//                         } else if(this.index == 3){
+//                             //饼状
+
+//                             var arr = CalPercent(dataSet,classes);
+
+//                             var data = CreateParData(arr, classes);
+
+//                             var option = ParOption(data);
+//                         } else if(this.index == 4){
+//                             //平行坐标
+                                            
+//                             var parallelAxis = createParallelAxis(dataSet);
+
+//                             var series = createParallelSeries(dataSet, classes);
+
+//                             var option = ParallelOption(classes,parallelAxis,series);
+                       
+//                         } else if(this.index == 5){
+//                             //雷达图
+
+//                             var sum = radViz(dataSet, 1, classes);
+
+//                             var series = RadVizSeries(classes, sum);
+                          
+//                             for(var fe in sum.features) {
+
+//                                 series.push({
+//                                            name: dataSet[0][parseInt(fe) + 1],
+//                                            type:'scatter',
+//                                            data: [sum.features[parseInt(fe)]]        
+//                                        });
+//                                 classes.push(dataSet[0][parseInt(fe) + 1]);
+//                             }
+//                             var option = creatRadVizOption(series,classes);
+
+//                        } else if(this.index == 6){
+//                            //傅里叶 
+                           
+//                             if(classes > 20) return;
+//                             var series = ASeries(dataSet, classes);
+//                             var option = AndrewOption(classes,series);
+//                        } else {
+//                            var option = {};
+//                        }
+        
+//                         var myChart = echarts.init(document.getElementById('chartShow'),'light');
+                        
+//                         myChart.setOption(option,true);     
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
+//获取图表选择
+var chartList = document.getElementById('chartList').getElementsByTagName('li');
+
+
+//可视化图表
+for(var i = 0; i < chartList.length; i++){
+    chartList[i].index = i;
+    chartList[i].onclick = function(){
+        var rows_length = dataSet.length, 
+            columns_length = dataSet[0].length;
+        clearName(chartList);
+        chartList[this.index].className = 'active';
+        var classes = findClass(dataSet,columns_length - 1);
+        // document.getElementById('chartShow').innerHTML = '';
+        if(this.index == 0){
+            //散点
+            var obj = RandomScatter(dataSet,classes);
+            
+            var series = ScatterSeries(dataSet,classes,obj);
+            
+            var option = ScatterOption(series,classes,obj);
+        } else if(this.index == 1){
+            //折线
+            var obj = RandomScatter(dataSet,classes);
+            for(var i = 0; i < classes.length; i++){
+                
+                var name = classes[i];
+                // console.log(obj[name]);
+                obj[name].sort(function(a, b){
+                    var value1 = a[0];
+                    var value2 = b[0];
+                    return value1 - value2;
+                });
+            }
+            var series = LineSeries(classes,obj);
+            var option = LineOption(series,classes,obj);
+
+        } else if(this.index == 2){
+            //条形
+
+            var arr = CalPercent(dataSet,classes);
+
+            var option = BarOption(arr,classes);
+        } else if(this.index == 3){
+            //饼状
+
+            var arr = CalPercent(dataSet,classes);
+
+            var data = CreateParData(arr, classes);
+
+            var option = ParOption(data);
+        } else if(this.index == 4){
+            //平行坐标
+                            
+            var parallelAxis = createParallelAxis(dataSet);
+
+            var series = createParallelSeries(dataSet, classes);
+
+            var option = ParallelOption(classes,parallelAxis,series);
+        
+        } else if(this.index == 5){
+            //雷达图
+
+            var sum = radViz(dataSet, 1, classes);
+
+            var series = RadVizSeries(classes, sum);
+            
+            for(var fe in sum.features) {
+
+                series.push({
+                            name: dataSet[0][parseInt(fe) + 1],
+                            type:'scatter',
+                            data: [sum.features[parseInt(fe)]]        
+                        });
+                classes.push(dataSet[0][parseInt(fe) + 1]);
+            }
+            var option = creatRadVizOption(series,classes);
+
+        } else if(this.index == 6){
+            //傅里叶 
+            
+            if(classes > 20) return;
+            var series = ASeries(dataSet, classes);
+            var option = AndrewOption(classes,series);
+        } else {
+            var option = {};
+        }
+
+        var myChart = echarts.init(document.getElementById('chartShow'),'light');
+        
+        myChart.setOption(option,true);     
+    }
+}
+
+
 //标签切换
+
+
 function tabChange(){
     if(state == true){
         for(var j = 0; j < nav.length; j++){
@@ -777,8 +1007,8 @@ function clearName(arr){
     }
 }
 
-//生成表格
-var createTable = function(array) {
+// 生成表格
+function createTable(array) {
 
     var table = '<table>', 
         allRows = array;
@@ -787,7 +1017,7 @@ var createTable = function(array) {
 
         if(singleRow === 0) {
 
-            table += '<table>';
+            table += '<thead>';
 
             table += '<tr>';
 
@@ -842,8 +1072,47 @@ var createTable = function(array) {
 
 
 
-//服务器地址
-var serverAddress = "http://120.76.139.47:8000";
+// function createTable(array) {
+
+//     var table = '<table>', 
+//         allRows = array;
+
+//         table += '<thead>';
+//             table += '<tr>';
+//     for(var i = 0; i < allRows[0].length; i++){
+//         table += '<th>';
+//         if(i = 0){
+//             table += '</th>';
+//         } else {
+
+//             table += `<input type='checkbox' name='' class='choose'></th>`;
+//         }
+//     }
+
+//     for(var singleRow = 0; singleRow < allRows.length; singleRow++){
+//         if(singleRow == 0){
+//             table += '<tbody>';
+//                 table += '<tr>';
+//         } else {
+//             table += '<tr>';
+//         }
+
+//         var rowCells = allRows[singleRow];
+
+//         for(var rowCell = 0; rowCell < rowCells.length;rowCell++){
+//             table += '<td>';
+//                 table += rowCells[rowCell];
+//                 table += '</td>';
+//         }
+//         table += '</tr>';
+//     }
+//     table += '</tbody>';
+//     table += '</table>';
+//     document.getElementById('tableShow').innerHTML = table;
+// }
+
+
+
 
 //数据集和模型相关
 var dataSet = null;
@@ -860,7 +1129,12 @@ var fit_target = "";
 
 var process = document.getElementById('process').getElementsByTagName('li');
 
+
+//点击提交并预处理
 process[0].onclick = function() {
+
+    //显示加载
+    LoadingPic.style.display = 'block';
 
     var submitdata = {
 
@@ -870,7 +1144,7 @@ process[0].onclick = function() {
 
         discreteColumns: [],
 
-        textColumn: ""
+        textColumn: "text"
 
     };
     
@@ -890,11 +1164,14 @@ process[0].onclick = function() {
 
             console.log(data_hashKey);
 
-        }
+        } 
+         //加载隐藏
+         LoadingPic.style.display = 'none';
     }
 
 };
 
+//点击训练
 process[1].onclick = function() {
 
     if(data_hashKey == "") {
@@ -904,6 +1181,9 @@ process[1].onclick = function() {
         return;
 
     }
+
+    //显示加载
+    LoadingPic.style.display = 'block';
 
     var submitdata = {
 
@@ -929,19 +1209,13 @@ process[1].onclick = function() {
 
             var data = JSON.parse(xmlhttp.responseText);
 
-            // console.log(data);
-
-            // console.log(data.images);
-
             CreatImg(data.images);
-
-            // console.log(data["status_code"]);
 
             model_hashKey = data["hashKey"];
 
-            // console.log(model_hashKey);
-
-        }
+        } 
+         //加载隐藏
+         LoadingPic.style.display = 'none';
     }
 
 };
@@ -951,13 +1225,18 @@ function CreatImg(arr){
     var image = '';
     for(var i = 0; i < arr.length; i++){
         var str = arr[i];
-        var dom = '<img src=data:image/png;base64,' + str.substring(2, str.length - 1) + '>';
+        var dom = '<img src= data:image/png;base64,'+str.substring(2,str.length - 1)+'>';
         image += dom;
     }
     document.getElementById('chartResult').innerHTML = image;
 }
 
+//点击预测
 process[2].onclick = function() {
+
+    alert("FREE版还不能进行预测，请尝试我们的PRO版。")
+
+    return
 
     var submitdata = {
 
@@ -990,6 +1269,7 @@ process[2].onclick = function() {
 
 };
 
+//算法选择
 var funcList = document.getElementById('funcList').getElementsByTagName('li');
 
 for(var i = 0;i < funcList.length;++i) {
@@ -998,15 +1278,7 @@ for(var i = 0;i < funcList.length;++i) {
 
     funcList[i].onclick = function() {
 
-        funcList[this.index].className = 'active';
-
-        fit_model = this.index + 1;
-
-        for(var j = 0;j < funcList.length;++j) {
-
-            if(j != this.index) funcList[j].className = '';
-
-        }
+        alert("FREE版还不能选择算法，请尝试我们的PRO版。")
 
     };
 

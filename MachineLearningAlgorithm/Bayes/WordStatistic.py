@@ -36,7 +36,7 @@ def wordcloudSpawn(dicts) :
 
     plt.savefig(save_file, format='png')
 
-    b64 = b64encode(save_file.getvalue()).decode('utf8')
+    b64 = b64encode(save_file.getvalue())
 
     return str(b64)
 
@@ -49,9 +49,6 @@ def stopwordslist(path):
     stopwords = [line.strip() for line in open(path, 'r', encoding='utf-8').readlines()]
 
     return stopwords
-
-import  os
-print(os.getcwd())
 
 stopword = stopwordslist('MachineLearningAlgorithm/Bayes/stop_words.txt')
 

@@ -5,52 +5,36 @@ Created on Tue Jul 28 22:04:40 2020
 @author: 许继元
 """
 import base64
-
+import numpy.linalg as lg
 import numpy as np
 from .metrics import r2_score # 一个点表示当前目录
 
 
 class LinearRegression(object):
     """使用向量化实现线性回归"""
+
     def __init__(self):
-        """在过程中计算出来的变量统一命令,后缀加上_"""
-        self.a_ = None  # 表示线性的斜率
-        self.b_ = None  # 表示线
+
+        self.weights = None
 
 
-    def fit(self, X_train, y_train):
-        """
-        训练模型
-        :param X_train:
-        :return:
-        """
-        X_train = X_train.reshape(len(X_train))
-        assert len(X_train) == len(y_train), 'X和Y的训练个数不相同'
-        x_mean = np.mean(X_train)
-        y_mean = np.mean(y_train)
-        self.a_ = (X_train - x_mean).dot(y_train - y_mean) / (X_train - x_mean).dot(X_train - x_mean)
-        self.b_ = y_mean - self.a_ * x_mean
 
+    def predict(self, data):
 
-    def _predict(self, x):
-        """
-        预测单个X的结果 线性方程y = a*x + b
-        :param x:
-        :return:
-        """
-        return self.a_ * x + self.b_
+        self.weights = np.random.randn(data.shape[1] + 1, 1)
 
+        data_t = np.ones((data.shape[0], data.shape[1] + 1))
 
-    def predict(self, X_test):
-        """
-        预测X，X是一维的数据
-        :param X_test:
-        :return:
-        """
-        assert self.a_ is not None and self.b_ is not None , '在predict之前请先fit'
+        data_t[0:data.shape[0], 0:data.shape[1]] = data
 
-        y_pridect = [self._predict(x) for x in X_test]
-        return np.array(y_pridect)
+        return np.array([i.sum() for i in (data_t * self.weights.transpose())])
+
+    def fit(self, data, label):
+        data_t = np.ones((data.shape[0], data.shape[1] + 1))
+
+        data_t[0:data.shape[0], 0:data.shape[1]] = data
+
+        self.weights = lg.inv(data_t.transpose().dot(data_t)).dot(data_t.transpose()).dot(label.transpose())
     
     
     def score(self, x_test, y_test):

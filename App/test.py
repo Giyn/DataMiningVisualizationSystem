@@ -22,4 +22,4 @@ if __name__ == '__main__' :
 
     bayes.fit(x, y)
 
-    bayes.visualize(ssler)
+    bayes.visualize(ssler, 0, 1)
