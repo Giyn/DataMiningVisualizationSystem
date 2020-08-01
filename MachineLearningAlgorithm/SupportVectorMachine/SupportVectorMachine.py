@@ -2,7 +2,9 @@ import base64
 
 import numpy as np
 import cvxopt
-# import matplotlib.pyplot as plt
+from io import BytesIO
+from base64 import *
+import matplotlib.pyplot as plt
 # from sklearn.datasets import load_breast_cancer
 # from sklearn.preprocessing import normalize
 # from sklearn.model_selection import train_test_split
@@ -96,7 +98,7 @@ class SVM:
                               self.kernel(self.support_vectors[i], self.support_vectors[0])
         y[y == -1] = 0
 
-    def visualize(self, ssler) :
+    def visualize(self, ssler, x, y) :
 
         res = []
 
@@ -109,8 +111,6 @@ class SVM:
 
             with open(pa, 'rb') as f:
                 data = base64.b64encode(f.read())
-
-            print(str(data))
 
             res.append(str(data))
 
@@ -151,14 +151,13 @@ class SVM:
 #     return data, np.array(target)
 
 
-def plot_picture(data, target, dimension=(0, 1), C=1, gamma=None, kernel=rbf_kernel, power=4, coef=4):
+def plot_picture(clf, data, target, dimension=(0, 1)):
     # 画图函数
     x_min, x_max = data[:, dimension[0]].min() - 0.02, data[:, dimension[0]].max() + 0.02
     y_min, y_max = data[:, dimension[1]].min() - 0.02, data[:, dimension[1]].max() + 0.02
     xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.02),
                          np.arange(y_min, y_max, 0.02))
-    clf = SVM(C=C, kernel=kernel, gamma=gamma, power=power, coef=coef)
-    # clf = SVC(kernel='rbf', gamma=gamma, C=C)
+
     data = data[:, dimension[0]:dimension[1]+1]
     clf.fit(data, target)
     z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
@@ -170,7 +169,14 @@ def plot_picture(data, target, dimension=(0, 1), C=1, gamma=None, kernel=rbf_ker
     plt.scatter(data[target == 1][:, 0], data[target == 1][:, 1], marker='x', color='k', s=100, lw=3)
     gamma = clf.gamma
     plt.title('SVM with $\gamma=$' + str(gamma))
-    plt.show()
+
+    save_file = BytesIO()
+
+    plt.savefig(save_file, format='png')
+
+    b64 = b64encode(save_file.getvalue()).decode('utf8')
+
+    return str(b64)
 
 # if __name__ == '__main__':
 #     data, target = load_data()

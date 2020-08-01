@@ -58,7 +58,7 @@ class LinearRegression(object):
         y_predict = self.predict(x_test)
         return r2_score(y_test, y_predict)
 
-    def visualize(self, ssler) :
+    def visualize(self, ssler, x, y) :
 
         res = []
 
@@ -75,8 +75,6 @@ class LinearRegression(object):
 
             with open(pa, 'rb') as f:
                 data = base64.b64encode(f.read())
-
-            print(str(data))
 
             res.append(str(data))
 

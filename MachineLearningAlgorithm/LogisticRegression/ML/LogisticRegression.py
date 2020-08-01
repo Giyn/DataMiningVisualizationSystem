@@ -87,25 +87,18 @@ class LogisticRegression:
         y_predict = self.predict(X_test)
         return accuracy_score(y_test, y_predict)
 
-    def visualize(self, ssler) :
+    def visualize(self, ssler, x, y) :
 
         res = []
 
         paths = ["MachineLearningAlgorithm/LogisticRegression/Pictures/feature_relative.png",
-                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_andrews_curves.png",
-                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_parallel_coordinates.png",
-                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_radviz.png",
-                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_scatter_1.png",
-                "MachineLearningAlgorithm/LinearRegression/Pictures/raw_scatter_2.png",
-                "MachineLearningAlgorithm/LinearRegression/Pictures/result_1.png",
-                "MachineLearningAlgorithm/LinearRegression/Pictures/result_2.png"]
+                "MachineLearningAlgorithm/LogisticRegression/Pictures/result_1.png",
+                "MachineLearningAlgorithm/LogisticRegression/Pictures/result_2.png"]
 
         for pa in paths :
 
             with open(pa, 'rb') as f:
                 data = base64.b64encode(f.read())
-
-            print(str(data))
 
             res.append(str(data))
 

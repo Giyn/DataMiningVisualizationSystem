@@ -172,7 +172,7 @@ class KNN:
         return y_p
 
 
-    def visualize(self, ssler) :
+    def visualize(self, ssler, x, y) :
 
         res = []
 
@@ -187,8 +187,6 @@ class KNN:
 
             with open(pa, 'rb') as f:
                 data = base64.b64encode(f.read())
-
-            print(str(data))
 
             res.append(str(data))
 

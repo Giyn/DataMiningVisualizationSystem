@@ -17,21 +17,6 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-/* 重点，测试，记得环回来 */
-
-#firstScreen .rightbox .part1 {
-    display: none;
-}
-
-/* 测试 */
-#firstScreen .rightbox .part2 {
-    display: none;
-}
-
-/* 测试 */
-#firstScreen .rightbox .page2 {
-    /* display: none; */
-}
 
 table {
     margin: 0 auto;
@@ -130,13 +115,13 @@ body {
 }
 
 #firstScreen .rightbox .search .thing {
-    height: 30px;
+    height: 34px;
     width: 400px;
     text-indent: 4px;
     vertical-align: middle;
     border: none;
     border-radius: 5px 0 0 5px;
-    border: 2px solid #5A8DF8;
+    /* border: 2px solid #5A8DF8; */
 }
 
 #firstScreen .rightbox .search .btn {
@@ -366,6 +351,23 @@ body {
     background-color: #F5F5FB; 
 }
 
+#firstScreen .rightbox .raw-chart .funcList h5::before {
+    content:'';
+    display: inline-block;
+    width:20px;
+    height:20px;
+    background-size: 100% 100%;
+    vertical-align: -4px;
+}
+
+#firstScreen .rightbox .raw-chart .funcList .variety::before {
+    background-image:url(../images/fenlei_c.png);
+}
+
+#firstScreen .rightbox .raw-chart .funcList .predict::before {
+    background-image:url(../images/yuce_c.png);
+}
+
 #firstScreen .rightbox .raw-chart .funcList li {
     height: 40px;
     line-height: 40px;
@@ -380,15 +382,23 @@ body {
  }
 
 #firstScreen .rightbox #chartResult {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     margin-top: 10px;
     width: 700px;
     height: 400px;
     background-color: #fff;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
     border-radius: 5px;
+    justify-content: space-around;
 }
 
-
+#firstScreen .rightbox #chartResult img {
+    width: calc(100%/3);
+    height: 150px;
+    margin: 5px 0;
+}
 
 #firstScreen .rightbox .table-area {
     margin: 10px;

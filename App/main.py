@@ -188,7 +188,7 @@ def fit() :
 
             "status_code" : 200,
 
-            "images" : model.visualize(ssler)
+            "images" : model.visualize(ssler, x, y)
 
         }
 

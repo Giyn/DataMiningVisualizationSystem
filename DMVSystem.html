@@ -90,7 +90,7 @@
                     <ul>
                         <ol class="chartList" id="chartList">
                             <h4>原始数据可视化</h4>
-                            <li class="active">散点图</li>
+                            <li>散点图</li>
                             <li>折线图</li>
                             <li>条形图</li>
                             <li>饼状图</li>
@@ -98,18 +98,22 @@
                             <li>RadViz图</li>
                             <li>Andrew图</li>
                         </ol>
-                        <ol class="funcList">
+                        <ol class="funcList" id="funcList">
                             <h4>自动匹配算法</h4>
 
-                            <h5>分类算法</h5>
-                            <li class="active">KNN</li>
-                            <li>SVM</li>
+                            <h5 class="variety">分类算法</h5>
                             <li>朴素贝叶斯</li>
+                            <li class="active">KNN</li>
+                            <!-- <li>SVM</li> -->
+                            <li>支持向量机</li>
+                            
 
-                            <h5>预测算法</h5>
-                            <li>决策树</li>
+                            <h5 class="predict">预测算法</h5>
+                            
                             <li>线性回归</li>
-                            <li>逻辑回归</li>
+                            <!-- <li>逻辑回归</li> -->
+                            <li>对数几率回归</li>
+                            <li>回归决策树</li>
                         </ol>
                     </ul>
                    
@@ -118,11 +122,11 @@
                         <div id="chartResult"></div>
                     </div>
                     
-                 
+  
                     <div class="message">
                         <h4>当前数据信息</h4>
                         <h5>数据名称：</h5>
-                        <p>未命名数据源</p>
+                        <p id="fileName">未命名数据源</p>
                         <h5>数据类型：</h5>
                         <p>CSV</p>
                         <h5>上传日期：</h5>
@@ -143,7 +147,7 @@
                
                 <!-- 表格 -->
                 <h3 class="table-area">表格展示</h3>
-                <ul class="process", id="process">
+                <ul class="process" id="process">
                     <li>提交并预处理</li>
                     <li>进行训练</li>
                     <li>进行预测</li>

@@ -19,10 +19,9 @@ def wordcloudSpawn(dicts) :
 
         background_color='white',
         max_words=1000,
-        # 最大号字体，如果不指定则为图像高度
+
         max_font_size=100,
-        # 画布宽度和高度，如果设置了mask则不会生效
-        # 词语水平摆放的频率，默认为0.9.即竖直摆放的频率为0.1
+
         prefer_horizontal=0.8,
 
         color_func = random_color_func
@@ -38,8 +37,6 @@ def wordcloudSpawn(dicts) :
     plt.savefig(save_file, format='png')
 
     b64 = b64encode(save_file.getvalue()).decode('utf8')
-
-    # plt.show()
 
     return str(b64)
 

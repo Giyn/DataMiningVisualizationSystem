@@ -40,7 +40,7 @@ class NaiveBayesClassifier(object) :
 
         return np.array(res)
 
-    def visualize(self, ssler) :
+    def visualize(self, ssler, x, y) :
 
         dicts = ssler.phrase_position
 

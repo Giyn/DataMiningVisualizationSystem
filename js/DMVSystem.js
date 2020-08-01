@@ -1,13 +1,15 @@
 //列表的数据源和可视化
 var nav = document.getElementById('nav').getElementsByTagName('li');
+//对应区域
 var part = document.getElementsByClassName('part');
 
-
+//对应的页面名字
 var pageIntroduct = document.getElementById('page-introduct');
 
-//表示状态
+//表示状态，有无导入数据源
 var state = false;
 
+//搜索区域
 var searchPart = document.getElementById('searchPart');
 
 //让对应区域消失
@@ -21,23 +23,27 @@ for(var m = 1; m < nav.length; m++){
 var file1 = document.getElementById('file1');
 
 
-    var data = "";
+var data = "";
 
-    file1.onchange = function(){
+file1.onchange = function(){
 
-        var file = file1.files[0];
+    var file = file1.files[0];
 
-        var reader = new FileReader();
+    var filename = file.name;
 
-        reader.readAsText(file,'utf-8');
+    document.getElementById('fileName').innerHTML = filename;
 
-        reader.onload = function(){
+    var reader = new FileReader();
 
-            data = reader.result;
+    reader.readAsText(file,'utf-8');
 
-        }
-        
+    reader.onload = function(){
+
+        data = reader.result;
+
     }
+    
+}
 
 //找类名
 function findClass(dataSet, pos) {
@@ -356,18 +362,18 @@ function AndrewOption(classes,series){
 //生成Andrew的series
 function ASeries(dataSet, classes) {
 
-    var colors = [
-        "#6C6C6C", "#AE0000", "#f079b4","#f00bf0", "#8600FF",
-        "#2828FF", "#0072E3", "#00CACA", "#02DF82", "#00DB00", 
-        "#82D900", "#e0e008", "#C6A300", "#f17f0d", "#D94600", 
-        "#a05959", "#949449",  "#4F9D9D", "#5ba3a3", "#9F4D95"
-    ];
+    // var colors = [
+    //     "#6C6C6C", "#AE0000", "#f079b4","#f00bf0", "#8600FF",
+    //     "#2828FF", "#0072E3", "#00CACA", "#02DF82", "#00DB00", 
+    //     "#82D900", "#e0e008", "#C6A300", "#f17f0d", "#D94600", 
+    //     "#a05959", "#949449",  "#4F9D9D", "#5ba3a3", "#9F4D95"
+    // ];
 
     var series = [];
 
     var len = dataSet[0].length;
 
-    var basic = Math.floor(Math.random()*colors.length);
+    // var basic = Math.floor(Math.random()*colors.length);
 
     for(var i = 1; i < dataSet.length; i++){
 
@@ -376,7 +382,11 @@ function ASeries(dataSet, classes) {
 
                 type: 'line',
 
-                data: Andrews(dataSet[i], -Math.PI, Math.PI, 0.1)
+                data: Andrews(dataSet[i], -Math.PI, Math.PI, 0.1),
+
+                // itemStyle: {
+                //     color: colors[(basic + classes.indexOf(dataSet[i][len - 1])) % 20]
+                // }
             };
 
         series.push(item);
@@ -465,25 +475,115 @@ function ParOption(data){
     return option;
 }
 
-var process = document.getElementById('process').getElementsByTagName('li');
+//随机两列散点
+function RandomScatter(dataSet, classes){
+    var len = dataSet[0].length;
+    var x = Math.floor(Math.random()*(len - 2) + 1);
+    var y = Math.floor(Math.random()*(len - 2) + 1);
+    var obj = {};
+    obj.x = dataSet[0][x];
+    obj.y = dataSet[0][y];
 
-process[0].onclick = function() {
+    
+        for(var i = 0; i < classes.length; i++){
+            obj[classes[i]] = [];
+            for(var j = 1; j < dataSet.length; j++){
+            if(classes[i] == dataSet[j][len - 1]){
+                var arr = [];
+                arr.push(dataSet[j][x]);
+                arr.push(dataSet[j][y]);
+                obj[classes[i]].push(arr);
+            }
+        }
+    }
+    return obj;
+}
 
-    alert("pretreat");
+//散点系列
+function ScatterSeries(dataSet,classes,obj){
+    var series = [];
+    for(var i = 0; i < classes.length; i++){
+        series.push({
+            name:classes[i],
+            type:'scatter',
+            data: obj[classes[i]]
+        })
+    }
+    return series;
+}
 
-};
+//散点Option
+function ScatterOption(series,classes,obj){
+    var option = {
+            title:{
+                text:'散点图',
+                left:'center'
+            },
+            legend: {
+                bottom: 0,
+                data: classes
+            },
+            tooltip:{
+                formatter: function (params) {
+                        return params.seriesName + ' :<br/>'
+                        + params.value[0] + '<br/>'
+                        + params.value[1];
+                },
+            },
+            xAxis:{
+                name: obj.x
+            },
+            yAxis:{
+                name: obj.y
+            },
+            series: series
+    }
+    return option;
+}
 
-process[1].onclick = function() {
+//折线系列
+function LineSeries(classes,obj){
+    var series = [];
+    for(var i = 0; i < classes.length; i++){
+        series.push({
+            name: classes[i],
+            type: 'line',
+            smooth: false,
+            data: obj[classes[i]]
+        });
+    }
+    return series;
 
-    alert("fit");
+}
 
-};
-
-process[2].onclick = function() {
-
-    alert("predict");
-
-};
+//折线图Option
+function LineOption(series,classes,obj){
+    var option = {
+        title:{
+            text:'折线图',
+            left:'center'
+        },
+        legend: {
+            bottom: 0,
+            data: classes
+        },
+        tooltip:{
+            formatter: function (params) {
+                    return params.seriesName + ' :<br/>'
+                    + params.value[0] + '<br/>'
+                    + params.value[1];
+            },
+        },
+        xAxis: {
+            name: obj.x,
+        },
+        yAxis: {
+            name: obj.y,
+        },
+        series: series
+    };
+    return option;
+}
 
 var chartList = document.getElementById('chartList').getElementsByTagName('li');
 
@@ -491,9 +591,16 @@ var chartList = document.getElementById('chartList').getElementsByTagName('li');
 //每个数据源的导入
 var source = document.getElementById('source').getElementsByTagName('span');
 
+
+//要导入数据集后的操作
 for(var i = 0; i < source.length; i++){
     source[i].index = i;
     source[i].onclick = function(){
+
+        if(!data){
+            alert('请选择文件');
+            return;
+        }
         state = true;
 
         source[this.index].innerHTML = "已导入";
@@ -529,6 +636,10 @@ for(var i = 0; i < source.length; i++){
                 
                 dataSet = eval(xmlhttp.responseText);
 
+                dataSet_string = xmlhttp.responseText;
+
+                fit_target = dataSet[0][dataSet[0].length - 1];
+
                 createTable(dataSet);
 
                 var rows_length = dataSet.length, 
@@ -541,14 +652,37 @@ for(var i = 0; i < source.length; i++){
                         chartList[this.index].className = 'active';
                         var classes = findClass(dataSet,columns_length - 1);
                         // document.getElementById('chartShow').innerHTML = '';
-                       if(this.index == 2){
-                            // var classes = findClass(dataSet,columns_length - 1);
+                       if(this.index == 0){
+                           //散点
+                            var obj = RandomScatter(dataSet,classes);
+                           
+                            var series = ScatterSeries(dataSet,classes,obj);
+                          
+                            var option = ScatterOption(series,classes,obj);
+                       } else if(this.index == 1){
+                           //折线
+                           var obj = RandomScatter(dataSet,classes);
+                            for(var i = 0; i < classes.length; i++){
+                                
+                                var name = classes[i];
+                                // console.log(obj[name]);
+                                obj[name].sort(function(a, b){
+                                    var value1 = a[0];
+                                    var value2 = b[0];
+                                    return value1 - value2;
+                                });
+                            }
+                            var series = LineSeries(classes,obj);
+                            var option = LineOption(series,classes,obj);
+
+                       } else if(this.index == 2){
+                            //条形
 
                             var arr = CalPercent(dataSet,classes);
 
                             var option = BarOption(arr,classes);
                         } else if(this.index == 3){
-                            // var classes = findClass(dataSet,columns_length - 1);
+                            //饼状
 
                             var arr = CalPercent(dataSet,classes);
 
@@ -557,7 +691,6 @@ for(var i = 0; i < source.length; i++){
                             var option = ParOption(data);
                         } else if(this.index == 4){
                             //平行坐标
-                            // var classes = findClass(dataSet, columns_length - 1);
                                             
                             var parallelAxis = createParallelAxis(dataSet);
 
@@ -566,7 +699,7 @@ for(var i = 0; i < source.length; i++){
                             var option = ParallelOption(classes,parallelAxis,series);
                        
                         } else if(this.index == 5){
-                            // var classes = findClass(dataSet,dataSet[0].length - 1);
+                            //雷达图
 
                             var sum = radViz(dataSet, 1, classes);
 
@@ -584,8 +717,8 @@ for(var i = 0; i < source.length; i++){
                             var option = creatRadVizOption(series,classes);
 
                        } else if(this.index == 6){
-                            
-                            // var classes = findClass(dataSet, dataSet[0].length - 1);
+                           //傅里叶 
+                           
                             if(classes > 20) return;
                             var series = ASeries(dataSet, classes);
                             var option = AndrewOption(classes,series);
@@ -595,17 +728,15 @@ for(var i = 0; i < source.length; i++){
                            
                         var myChart = echarts.init(document.getElementById('chartShow'),'light');
                         
-                        myChart.setOption(option,true);
-
-                        
+                        myChart.setOption(option,true);     
                     }
                 }
-
             }
         }
-    
     }
 }
+
+
 
 //标签切换
 function tabChange(){
@@ -706,5 +837,178 @@ var createTable = function(array) {
     table += '</table>';
     
     document.getElementById('tableShow').innerHTML = table;
+
+}
+
+
+
+//服务器地址
+var serverAddress = "http://120.76.139.47:8000";
+
+//数据集和模型相关
+var dataSet = null;
+
+var dataSet_string = "";
+
+var data_hashKey = "";
+
+var model_hashKey = "";
+
+var fit_model = 5;
+
+var fit_target = "";
+
+var process = document.getElementById('process').getElementsByTagName('li');
+
+process[0].onclick = function() {
+
+    var submitdata = {
+
+        dataSet: dataSet_string,
+
+        dropColumns: [] ,
+
+        discreteColumns: [],
+
+        textColumn: ""
+
+    };
+    
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.open("POST",serverAddress + "/api-pretreatment",true);
+
+    xmlhttp.setRequestHeader("Content-type", "application/json");
+
+    xmlhttp.send(JSON.stringify(submitdata));
+
+    xmlhttp.onreadystatechange = function() {
+
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+
+            data_hashKey = xmlhttp.responseText;
+
+            console.log(data_hashKey);
+
+        }
+    }
+
+};
+
+process[1].onclick = function() {
+
+    if(data_hashKey == "") {
+
+        alert("数据尚未进行预处理");
+
+        return;
+
+    }
+
+    var submitdata = {
+
+        hashKey: data_hashKey,
+
+        model: fit_model,
+
+        target: fit_target
+
+    };
+    
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.open("POST", serverAddress + "/api-fit",true);
+
+    xmlhttp.setRequestHeader("Content-type", "application/json");
+
+    xmlhttp.send(JSON.stringify(submitdata));
+
+    xmlhttp.onreadystatechange = function() {
+
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+
+            var data = JSON.parse(xmlhttp.responseText);
+
+            // console.log(data);
+
+            // console.log(data.images);
+
+            CreatImg(data.images);
+
+            // console.log(data["status_code"]);
+
+            model_hashKey = data["hashKey"];
+
+            // console.log(model_hashKey);
+
+        }
+    }
+
+};
+
+//生成并插入图片
+function CreatImg(arr){
+    var image = '';
+    for(var i = 0; i < arr.length; i++){
+        var str = arr[i];
+        var dom = '<img src=data:image/png;base64,' + str.substring(2, str.length - 1) + '>';
+        image += dom;
+    }
+    document.getElementById('chartResult').innerHTML = image;
+}
+
+process[2].onclick = function() {
+
+    var submitdata = {
+
+        hashKeyI: data_hashKey,
+
+        hashKeyII: model_hashKey
+
+    };
+    
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.open("POST",serverAddress + "/api-predict",true);
+
+    xmlhttp.setRequestHeader("Content-type", "application/json");
+
+    xmlhttp.send(JSON.stringify(submitdata));
+
+    xmlhttp.onreadystatechange = function() {
+
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+
+            var temp = eval(xmlhttp.responseText);
+
+            createTable(temp);
+
+            console.log(temp);
+
+        }
+    }
+
+};
+
+var funcList = document.getElementById('funcList').getElementsByTagName('li');
+
+for(var i = 0;i < funcList.length;++i) {
+
+    funcList[i].index = i;
+
+    funcList[i].onclick = function() {
+
+        funcList[this.index].className = 'active';
+
+        fit_model = this.index + 1;
+
+        for(var j = 0;j < funcList.length;++j) {
+
+            if(j != this.index) funcList[j].className = '';
+
+        }
+
+    };
+
 
 }
