@@ -11,7 +11,7 @@ var state = false;
 
 
 //服务器地址
-var serverAddress = "http://120.76.139.47:8000";
+var serverAddress = "http://127.0.0.1:4000";
 
 
  //获取显示加载图片
