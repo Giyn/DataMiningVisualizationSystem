@@ -1,5 +1,7 @@
 # DataMiningVisualizationSystem
 
+![https://github.com/Giyn/DataMiningVisualizationSystem/releases/tag/1.0](https://img.shields.io/badge/release-beta-blue.svg) ![https://github.com/Giyn/DataMiningVisualizationSystem/releases/tag/1.0](https://img.shields.io/badge/version-1.0.0-red.svg) ![https://github.com/Giyn/DataMiningVisualizationSystem/releases/tag/1.0](https://img.shields.io/badge/build-passing-green.svg)
+
 
 
 ## :scroll: Introduction
