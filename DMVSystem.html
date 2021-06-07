@@ -9,164 +9,165 @@
     <script src="echarts/echarts.min.js"></script>
 </head>
 <body>
-    <div id="LoadingPic">
-        <img src="images/timg.gif" alt="">
-    </div>
-    <!-- 首屏主要内容 -->
-    <div id="firstScreen" class="clearfix">
-        <h1 class="headline">树蛙可视化系统</h1>
-        <ul class="sidebar fl" id="nav">
-            <li class="active iconfont">
-                &#xe630;
-                数据源
-            </li>
-            <li class="iconfont">
-                &#xe639;
-                可视化
-            </li>
-        </ul>
-        <div class="rightbox fr">
-            <!-- 搜索框 -->
-            <div class="introduct">
-                <h2 class="page-introduct fl" id="page-introduct">数据源</h2>
-                <div class="search fr" id="searchPart">
-                    <!-- <form action=""> -->
-                        <input type="text" class="thing" id="search" name="key" autocomplete="off" placeholder="请输入数据源名称(搜索功能可选)">
-                        <input type="submit" id="submit" class="iconfont btn" value="&#xe65a;">
-                    <!-- </form> -->
-                </div>
+<div id="LoadingPic">
+    <img src="images/timg.gif" alt="">
+</div>
+<!-- 首屏主要内容 -->
+<div id="firstScreen" class="clearfix">
+    <h1 class="headline">树蛙可视化系统</h1>
+    <ul class="sidebar fl" id="nav">
+        <li class="active iconfont">
+            &#xe630;
+            数据源
+        </li>
+        <li class="iconfont">
+            &#xe639;
+            可视化
+        </li>
+    </ul>
+    <div class="rightbox fr">
+        <!-- 搜索框 -->
+        <div class="introduct">
+            <h2 class="page-introduct fl" id="page-introduct">数据源</h2>
+            <div class="search fr" id="searchPart">
+                <!-- <form action=""> -->
+                <input type="text" class="thing" id="search" name="key" autocomplete="off"
+                       placeholder="请输入数据源名称(搜索功能可选)">
+                <input type="submit" id="submit" class="iconfont btn" value="&#xe65a;">
+                <!-- </form> -->
             </div>
-            <div class="part" id="Page">               
-                <ul class="data-nav">
-                    <li>
-                        <span  class="active">参考数据源</span>
-                    </li>
-                    <li>
-                        <span>我的数据</span>
-                    </li>
-                
-                </ul>
-                <ul class="data" id='source'>
-                    <li>
-                        <img src="images/朴素贝叶斯.png" alt="">
-                        <h3>垃圾邮件集</h3>
-                        <p title="">让AI为您分类垃圾邮件！</p>
-                        <span>导入数据集</span>
-                    </li>
-                    <li>
-                        <img src="images/KNN.png" alt="">
-                        <h3>Tree集</h3>
-                        <p title="">在二次创作的数据集中感受“近朱者赤近墨者黑”！</p>
-                        <span>导入数据集</span>
-                    </li>
-                    <li>
-                        <img src="images/SVM.png" alt="">
-                        <h3>乳腺癌集</h3>
-                        <p title="">AI如何在29个指标的数据中判断乳腺癌？</p>
-                        <span>导入数据集</span>
-                    </li>
-                    <li>
-                        <img src="images/线性回归.png" alt="">
-                        <h3>房价集</h3>
-                        <p title="">让AI为您摇身一变为房地产大亨！</p>
-                        <span>导入数据集</span>
-                    </li>
-                    <li>
-                        <img src="images/逻辑回归.png" alt="">
-                        <h3>简化鸢尾花集</h3>
-                        <p title="">划分界限！</p>
-                        <span>导入数据集</span>
-                    </li>
-                    <li>
-                        <img src="images/决策树.png" alt="">
-                        <h3>森林火灾集</h3>
-                        <p title="">AI也能摇身一变为森林火警指挥系统！</p>
-                        <span>导入数据集</span>
-                    </li>
-                </ul>
-               
-            </div>
-                
-            <div class="part" id="Page">
-               
-                <!-- 图表 -->
-                <div class="raw-chart">
-                    <ul>
-                        <ol class="chartList" id="chartList">
-                            <h4>原始数据可视化</h4>
-                            <li>散点图</li>
-                            <li>折线图</li>
-                            <li>条形图</li>
-                            <li>饼状图</li>
-                            <li>平行坐标图</li>
-                            <li>RadViz图</li>
-                            <li>Andrew图</li>
-                        </ol>
-                        <ol class="funcList" id="funcList">
-                            <h4>自动匹配算法</h4>
-
-                            <h5 class="variety">分类算法</h5>
-                            <li>朴素贝叶斯</li>
-                            <li>KNN</li>
-                            <!-- <li>SVM</li> -->
-                            <li>支持向量机</li>
-                            
-
-                            <h5 class="predict">预测算法</h5>
-                            
-                            <li>线性回归</li>
-                            <!-- <li>逻辑回归</li> -->
-                            <li>对数几率回归</li>
-                            <li>回归决策树</li>
-                        </ol>
-                    </ul>
-                   
-                    <div class="chart-area">
-                        <div id="chartShow"></div>
-                        <div id="chartResult"></div>
-                    </div>
-                    
-  
-                    <div class="message">
-                        <h4>当前数据信息</h4>
-                        <h5>数据名称：</h5>
-                        <p id="fileName">未命名数据源</p>
-                        <h5>数据类型：</h5>
-                        <p>CSV</p>
-                        <h5>上传日期：</h5>
-                        <p>2020 - 08 - 01</p>
-                        <h5>简介：</h5>
-                        <p id="fileSay">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
-                            sed do eiusmod tempor incididunt ut labore et dolore magna 
-                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
-                            ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                            Duis aute irure dolor in reprehenderit in voluptate velit 
-                            esse cillum dolore eu fugiat nulla pariatur. Excepteur 
-                            sint occaecat cupidatat non proident, sunt in culpa qui 
-                            officia deserunt mollit anim id est laborum.
-                        </p>
-                    </div>
-                </div>
-               
-                <!-- 表格 -->
-                <h3 class="table-area">表格展示</h3>
-                <ul class="process" id="process">
-                    <li>提交并预处理</li>
-                    <li>进行训练</li>
-                    <li>进行预测</li>
-                    <li id="assess" class="assess"></li>
-                </ul>
-                <div class="table" id="tableShow">
-
-                </div>
-
-            </div>
-                
-           
         </div>
+        <div class="part" id="Page">
+            <ul class="data-nav">
+                <li>
+                    <span class="active">参考数据源</span>
+                </li>
+                <li>
+                    <span>我的数据</span>
+                </li>
+
+            </ul>
+            <ul class="data" id='source'>
+                <li>
+                    <img src="images/朴素贝叶斯.png" alt="">
+                    <h3>垃圾邮件集</h3>
+                    <p title="">让AI为您分类垃圾邮件！</p>
+                    <span>导入数据集</span>
+                </li>
+                <li>
+                    <img src="images/KNN.png" alt="">
+                    <h3>Tree集</h3>
+                    <p title="">在二次创作的数据集中感受“近朱者赤近墨者黑”！</p>
+                    <span>导入数据集</span>
+                </li>
+                <li>
+                    <img src="images/SVM.png" alt="">
+                    <h3>乳腺癌集</h3>
+                    <p title="">AI如何在29个指标的数据中判断乳腺癌？</p>
+                    <span>导入数据集</span>
+                </li>
+                <li>
+                    <img src="images/线性回归.png" alt="">
+                    <h3>房价集</h3>
+                    <p title="">让AI为您摇身一变为房地产大亨！</p>
+                    <span>导入数据集</span>
+                </li>
+                <li>
+                    <img src="images/逻辑回归.png" alt="">
+                    <h3>简化鸢尾花集</h3>
+                    <p title="">划分界限！</p>
+                    <span>导入数据集</span>
+                </li>
+                <li>
+                    <img src="images/决策树.png" alt="">
+                    <h3>森林火灾集</h3>
+                    <p title="">AI也能摇身一变为森林火警指挥系统！</p>
+                    <span>导入数据集</span>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="part" id="Page">
+
+            <!-- 图表 -->
+            <div class="raw-chart">
+                <ul>
+                    <ol class="chartList" id="chartList">
+                        <h4>原始数据可视化</h4>
+                        <li>散点图</li>
+                        <li>折线图</li>
+                        <li>条形图</li>
+                        <li>饼状图</li>
+                        <li>平行坐标图</li>
+                        <li>RadViz图</li>
+                        <li>Andrew图</li>
+                    </ol>
+                    <ol class="funcList" id="funcList">
+                        <h4>自动匹配算法</h4>
+
+                        <h5 class="variety">分类算法</h5>
+                        <li>朴素贝叶斯</li>
+                        <li>KNN</li>
+                        <!-- <li>SVM</li> -->
+                        <li>支持向量机</li>
+
+
+                        <h5 class="predict">预测算法</h5>
+
+                        <li>线性回归</li>
+                        <!-- <li>逻辑回归</li> -->
+                        <li>对数几率回归</li>
+                        <li>回归决策树</li>
+                    </ol>
+                </ul>
+
+                <div class="chart-area">
+                    <div id="chartShow"></div>
+                    <div id="chartResult"></div>
+                </div>
+
+
+                <div class="message">
+                    <h4>当前数据信息</h4>
+                    <h5>数据名称：</h5>
+                    <p id="fileName">未命名数据源</p>
+                    <h5>数据类型：</h5>
+                    <p>CSV</p>
+                    <h5>上传日期：</h5>
+                    <p>2020 - 08 - 01</p>
+                    <h5>简介：</h5>
+                    <p id="fileSay">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore magna
+                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                        ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        Duis aute irure dolor in reprehenderit in voluptate velit
+                        esse cillum dolore eu fugiat nulla pariatur. Excepteur
+                        sint occaecat cupidatat non proident, sunt in culpa qui
+                        officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 表格 -->
+            <h3 class="table-area">表格展示</h3>
+            <ul class="process" id="process">
+                <li>提交并预处理</li>
+                <li>进行训练</li>
+                <li>进行预测</li>
+                <li id="assess" class="assess"></li>
+            </ul>
+            <div class="table" id="tableShow">
+
+            </div>
+
+        </div>
+
+
     </div>
-    
-    <script src="js/DMVSystem.js"></script>
+</div>
+
+<script src="js/DMVSystem.js"></script>
 </body>
 </html>

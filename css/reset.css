@@ -1,36 +1,36 @@
 * {
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
     font-family: arial;
-    color:#3c3c3c;
+    color: #3c3c3c;
 }
 
 a {
-    text-decoration:none;
+    text-decoration: none;
 }
 
 ul,
 li {
-    list-style:none;
+    list-style: none;
 }
 
 .fl {
-    float:left;
+    float: left;
 }
 
 .fr {
-    float:right;
+    float: right;
 }
 
 .clearfix::after {
-    content:"";
-    display:block;
-    clear:both;
+    content: "";
+    display: block;
+    clear: both;
 }
 
 img {
-    border:none;
-    vertical-align:middle;
+    border: none;
+    vertical-align: middle;
     /* eg.div引入img下端会有空隙，加这就不会 */
 }
 
@@ -40,8 +40,8 @@ textarea {
 }
 
 .layer {
-    width:1200px;
-    margin:0 auto;
+    width: 1200px;
+    margin: 0 auto;
 }
 
 table {
@@ -51,18 +51,18 @@ table {
 
 input,
 button {
-    outline:none;
+    outline: none;
 }
 
 i {
-    font-style:normal;
+    font-style: normal;
 }
 
 em {
     font-style: normal;
 }
 
-.reds{
+.reds {
     /* background-color: red; */
     background-image: linear-gradient(to right, red, orange);
 }

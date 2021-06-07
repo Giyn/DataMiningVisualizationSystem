@@ -6,6 +6,7 @@ Created on Thu Jul 30 23:57:37 2020
 """
 
 import numpy as np
+
 from .metrics import r2_score
 
 
@@ -15,7 +16,6 @@ class MultipleLinearRegression:
         self.coef_ = None
         self.intercept_ = None
         self._theta = None
-
 
     def fit_normal(self, X_train, y_train):
         """根据训练数据集X_train, y_train训练MultipleLinearRegression模型"""
@@ -30,12 +30,10 @@ class MultipleLinearRegression:
 
         return self
 
-
     def fit_gd(self, X_train, y_train, eta=0.01, n_iters=1e4):
         """根据训练数据集X_train, y_train, 使用梯度下降法训练MultipleLinearRegression模型"""
         assert X_train.shape[0] == y_train.shape[0], \
             "the size of X_train must be equal to the size of y_train"
-
 
         def J(theta, X_b, y):
             try:
@@ -43,15 +41,8 @@ class MultipleLinearRegression:
             except:
                 return float('inf')
 
-
         def dJ(theta, X_b, y):
-            # res = np.empty(len(theta))
-            # res[0] = np.sum(X_b.dot(theta) - y)
-            # for i in range(1, len(theta)):
-            #     res[i] = (X_b.dot(theta) - y).dot(X_b[:, i])
-            # return res * 2 / len(X_b)
             return X_b.T.dot(X_b.dot(theta) - y) * 2. / len(X_b)
-
 
         def gradient_descent(X_b, y, initial_theta, eta, n_iters=1e4, epsilon=1e-8):
 
@@ -78,17 +69,14 @@ class MultipleLinearRegression:
 
         return self
 
-
     def fit_sgd(self, X_train, y_train, n_iters=5, t0=5, t1=50):
         """根据训练数据集X_train, y_train, 使用梯度下降法训练MultipleLinearRegression模型"""
         assert X_train.shape[0] == y_train.shape[0], \
             "the size of X_train must be equal to the size of y_train"
         assert n_iters >= 1
 
-
         def dJ_sgd(theta, X_b_i, y_i):
             return X_b_i * (X_b_i.dot(theta) - y_i) * 2.
-
 
         def sgd(X_b, y, initial_theta, n_iters, t0=5, t1=50):
 
@@ -117,7 +105,6 @@ class MultipleLinearRegression:
 
         return self
 
-
     def predict(self, X_predict):
         """给定待预测数据集X_predict，返回表示X_predict的结果向量"""
         assert self.intercept_ is not None and self.coef_ is not None, \
@@ -128,12 +115,10 @@ class MultipleLinearRegression:
         X_b = np.hstack([np.ones((len(X_predict), 1)), X_predict])
         return X_b.dot(self._theta)
 
-
     def score(self, X_test, y_test):
         """根据测试数据集 X_test 和 y_test 确定当前模型的准确度"""
         y_predict = self.predict(X_test)
         return r2_score(y_test, y_predict)
-
 
     def __repr__(self):
         return "MultipleLinearRegression()"

@@ -14,35 +14,31 @@ var state = false;
 var serverAddress = "http://127.0.0.1:4000";
 
 
- //获取显示加载图片
- var LoadingPic = document.getElementById('LoadingPic');
+//获取显示加载图片
+var LoadingPic = document.getElementById('LoadingPic');
 
 
 //搜索区域
 var searchPart = document.getElementById('searchPart');
 
 //让对应区域消失
-for(var m = 1; m < nav.length; m++){
+for (var m = 1; m < nav.length; m++) {
     nav[m].className = 'iconfont';
-    part[m].style.display= "none";
+    part[m].style.display = "none";
 }
-
 
 
 //读取文件
 var file1 = document.getElementById('file1');
 
 
-
 var data = "";
-
 
 
 //根据这个来请求
 var num;
 
 // var file = document.getElementById('source').getElementsByTagName('input');
-
 
 
 // file1.onchange = function(){
@@ -80,7 +76,7 @@ var num;
 //         data = reader.result;
 
 //     }
-    
+
 // }
 
 
@@ -89,9 +85,9 @@ function findClass(dataSet, pos) {
 
     var res = new Array();
 
-    for(var i = 1; i < dataSet.length; i++){
+    for (var i = 1; i < dataSet.length; i++) {
 
-        if(!res.includes(dataSet[i][pos])) 
+        if (!res.includes(dataSet[i][pos]))
             res.push(dataSet[i][pos]);
 
     }
@@ -99,32 +95,32 @@ function findClass(dataSet, pos) {
     return res;
 
 }
-        
+
 
 //创建平行坐标系
-function createParallelAxis(dataSet){
+function createParallelAxis(dataSet) {
 
     var columns_length = dataSet[0].length;
     var parallelAxis = new Array();
     var featName = dataSet[0].slice(1, columns_length - 1);
-    for(var i = 0; i < featName.length; i++){
-        
-        parallelAxis.push({dim: i,name:featName[i]});
+    for (var i = 0; i < featName.length; i++) {
+
+        parallelAxis.push({dim: i, name: featName[i]});
     }
 
     return parallelAxis;
-}   
+}
 
 
 //随机生成颜色
-function IsColor(arr,classes){
+function IsColor(arr, classes) {
     var len = arr.length;
     var colors = [
-        "#5B8FF9", "#5AD8A6", "#5D7092","#F6BD16", "#E8684A",
-        "#6DC8EC", "#9270CA", "#FF9D4D", "#FF9D4D", "#FF99C3", 
+        "#5B8FF9", "#5AD8A6", "#5D7092", "#F6BD16", "#E8684A",
+        "#6DC8EC", "#9270CA", "#FF9D4D", "#FF9D4D", "#FF99C3",
     ];
 
-    var basic = Math.floor(Math.random()*colors.length);
+    var basic = Math.floor(Math.random() * colors.length);
 
     var color = colors[(basic + classes.indexOf(arr[len - 1])) % 10];
 
@@ -133,11 +129,10 @@ function IsColor(arr,classes){
 
 
 //创平行坐标系系列
-function createParallelSeries(dataSet, classes){
+function createParallelSeries(dataSet, classes) {
 
-    
 
-    var rows_length = dataSet.length, 
+    var rows_length = dataSet.length,
         columns_length = dataSet[0].length;
 
     var len = classes.length;
@@ -146,16 +141,16 @@ function createParallelSeries(dataSet, classes){
 
     var series = new Array();
 
-    for(var i = 0; i < len; i++){
+    for (var i = 0; i < len; i++) {
         feature[classes[i]] = new Array();
     }
 
-    for(var i = 1; i < rows_length - 1; i++){
+    for (var i = 1; i < rows_length - 1; i++) {
         var temp = dataSet[i].slice(1, columns_length - 1);
         feature[dataSet[i][columns_length - 1]].push(temp);
     }
 
-    for(var i = 0; i < len; i++){
+    for (var i = 0; i < len; i++) {
         series.push({
             name: classes[i],
             type: 'parallel',
@@ -171,11 +166,11 @@ function createParallelSeries(dataSet, classes){
 
 
 //创平行坐标系option
-function ParallelOption(classes,parallelAxis,series){
+function ParallelOption(classes, parallelAxis, series) {
     var option = {
         title: {
-            text:'平行坐标图',
-            left:'center'
+            text: '平行坐标图',
+            left: 'center'
         },
         legend: {
             bottom: 30,
@@ -212,38 +207,39 @@ function ParallelOption(classes,parallelAxis,series){
 //RadViz雷达图
 function radViz(dataSet, R, classes) {
 
-    var columns_Count = dataSet[0].length, rows_Count = dataSet.length;;
+    var columns_Count = dataSet[0].length, rows_Count = dataSet.length;
+    ;
 
     var theta = 360.0 / (columns_Count - 2);
 
     dataSet = normalization(dataSet);
 
     var res = {
-        features:[]
+        features: []
     };
 
-    for(var i in classes) {
+    for (var i in classes) {
 
         res[classes[i]] = new Array();
 
     }
 
-    for(var rad = 0.0, i = 1;i < columns_Count -1;++i, rad += theta) {
+    for (var rad = 0.0, i = 1; i < columns_Count - 1; ++i, rad += theta) {
 
-        x = R * Math.cos(rad/180*Math.PI);
+        x = R * Math.cos(rad / 180 * Math.PI);
 
-        y = R * Math.sin(rad/180*Math.PI);
+        y = R * Math.sin(rad / 180 * Math.PI);
 
         res.features.push([x, y])
 
     }
 
 
-    for(var j = 1;j < rows_Count;++j) {
+    for (var j = 1; j < rows_Count; ++j) {
 
         var x = 0.0, y = 0.0;
 
-        for(var rad = 0.0, i = 1;i < columns_Count -1;++i, rad += theta) {
+        for (var rad = 0.0, i = 1; i < columns_Count - 1; ++i, rad += theta) {
 
             x += R * dataSet[j][i] * Math.cos(rad / 180.0 * Math.PI);
 
@@ -260,16 +256,16 @@ function radViz(dataSet, R, classes) {
 }
 
 //求出RadViz雷达图坐标
-var normalization = function(dataSet) {
+var normalization = function (dataSet) {
 
-    var columns_Count = dataSet[0].length, 
+    var columns_Count = dataSet[0].length,
         rows_Count = dataSet.length;
 
-    for(var i = 1;i < columns_Count - 1;++i) {
+    for (var i = 1; i < columns_Count - 1; ++i) {
 
         var maxi = -0x3f3f3f3f, mini = 0x3f3f3f3f;
 
-        for(var j = 1;j < rows_Count;++j) {
+        for (var j = 1; j < rows_Count; ++j) {
 
             maxi = Math.max(dataSet[j][i], maxi)
 
@@ -277,7 +273,7 @@ var normalization = function(dataSet) {
 
         }
 
-        for(var j = 1;j < rows_Count;++j) {
+        for (var j = 1; j < rows_Count; ++j) {
 
             dataSet[j][i] -= mini;
 
@@ -292,39 +288,39 @@ var normalization = function(dataSet) {
 }
 
 //创建雷达图option
-function creatRadVizOption(series,classes){
+function creatRadVizOption(series, classes) {
     var option = {
-        title:{
-            text:'RadViz雷达图',
-            left:'center'
+        title: {
+            text: 'RadViz雷达图',
+            left: 'center'
         },
-       legend: {
+        legend: {
             bottom: 0,
             data: classes
-       },
-       tooltip:{
+        },
+        tooltip: {
             formatter: function (params) {
-                    return params.seriesName + ' :<br/>'
+                return params.seriesName + ' :<br/>'
                     + params.value[0] + '<br/>'
                     + params.value[1];
             },
-       },
-       xAxis:{},
-       yAxis:{},
-       series:series
-   }
-   return option;
+        },
+        xAxis: {},
+        yAxis: {},
+        series: series
+    }
+    return option;
 }
 
 //创建RadViz系列
-function RadVizSeries(classes,sum){
+function RadVizSeries(classes, sum) {
     var len = classes.length;
     var series = [];
-    for(var i = 0; i < len; i++){
+    for (var i = 0; i < len; i++) {
         series.push({
             name: classes[i],
-            type:'scatter',
-            data:sum[classes[i]]
+            type: 'scatter',
+            data: sum[classes[i]]
         })
     }
     return series;
@@ -332,36 +328,36 @@ function RadVizSeries(classes,sum){
 
 
 //求出Andrew坐标
-function Andrews(data, l, h, accuracy){
+function Andrews(data, l, h, accuracy) {
 
     var columns_Count = data.length;
 
-    var args = new Array(), 
+    var args = new Array(),
         res = new Array();
 
-    for(var i = 1; i < columns_Count - 1;i++) {
+    for (var i = 1; i < columns_Count - 1; i++) {
 
         args.push(parseFloat(data[i]));
 
     }
 
-    for(var x = l;x <= h;x += accuracy) {
+    for (var x = l; x <= h; x += accuracy) {
 
         var y = 0;
 
-        for(var i = 0; i < args.length; i++) {
+        for (var i = 0; i < args.length; i++) {
 
-            if(i == 0) {
+            if (i == 0) {
 
-                y += args[i]/Math.sqrt(2);
+                y += args[i] / Math.sqrt(2);
 
-            }else if(i % 2) {
+            } else if (i % 2) {
 
-                y += args[i]*Math.cos((i - 1)/2*x);
+                y += args[i] * Math.cos((i - 1) / 2 * x);
 
             } else {
 
-                y += args[i]*Math.sin(i/2*x);
+                y += args[i] * Math.sin(i / 2 * x);
 
             }
         }
@@ -374,29 +370,29 @@ function Andrews(data, l, h, accuracy){
 }
 
 //生成Andrew的option
-function AndrewOption(classes,series){
+function AndrewOption(classes, series) {
     var option = {
-        title:{
-            text:'Andrew图',
-            left:'center'
+        title: {
+            text: 'Andrew图',
+            left: 'center'
         },
-       legend: {
+        legend: {
             bottom: 0,
             data: classes
-       },
-       tooltip:{
+        },
+        tooltip: {
             formatter: function (params) {
-                    return params.seriesName + ' :<br/>'
+                return params.seriesName + ' :<br/>'
                     + params.value[0] + '<br/>'
                     + params.value[1];
             },
-       },
-       xAxis:{},
-       yAxis:{},
-       series:  series
-  
-   }
-   return option;
+        },
+        xAxis: {},
+        yAxis: {},
+        series: series
+
+    }
+    return option;
 }
 
 //生成Andrew的series
@@ -414,29 +410,29 @@ function ASeries(dataSet, classes) {
 
     // var basic = Math.floor(Math.random()*colors.length);
 
-    for(var i = 1; i < dataSet.length; i++){
+    for (var i = 1; i < dataSet.length; i++) {
 
-            var item = {
-                name: dataSet[i][len - 1],
+        var item = {
+            name: dataSet[i][len - 1],
 
-                type: 'line',
+            type: 'line',
 
-                data: Andrews(dataSet[i], -Math.PI, Math.PI, 0.1),
+            data: Andrews(dataSet[i], -Math.PI, Math.PI, 0.1),
 
-                // itemStyle: {
-                    
-                //     color:function(params){
+            // itemStyle: {
 
-                //         var colors = [
-                //             "#5B8FF9", "#5AD8A6", "#5D7092","#F6BD16", "#E8684A",
-                //             "#6DC8EC", "#9270CA", "#FF9D4D", "#FF9D4D", "#FF99C3", 
-                //         ];
-                //         return colors[params.dataIndex];
+            //     color:function(params){
 
-                //     }
-                //     // color: colors[(basic + classes.indexOf(dataSet[i][len - 1])) % 10]
-                // }
-            };
+            //         var colors = [
+            //             "#5B8FF9", "#5AD8A6", "#5D7092","#F6BD16", "#E8684A",
+            //             "#6DC8EC", "#9270CA", "#FF9D4D", "#FF9D4D", "#FF99C3",
+            //         ];
+            //         return colors[params.dataIndex];
+
+            //     }
+            //     // color: colors[(basic + classes.indexOf(dataSet[i][len - 1])) % 10]
+            // }
+        };
 
         series.push(item);
     }
@@ -445,14 +441,14 @@ function ASeries(dataSet, classes) {
 
 
 //找每个数的百分比
-function CalPercent(dataSet,classes){
+function CalPercent(dataSet, classes) {
     var lines = dataSet.length;
     var len = dataSet[0].length;
     var arr = [];
-    for(var j = 0;j < classes.length; j++){
+    for (var j = 0; j < classes.length; j++) {
         var x = 0;
-        for(var i = 1; i < lines; i++){
-            if(dataSet[i][len - 1] == classes[j]){
+        for (var i = 1; i < lines; i++) {
+            if (dataSet[i][len - 1] == classes[j]) {
                 x++;
             }
         }
@@ -462,59 +458,55 @@ function CalPercent(dataSet,classes){
 }
 
 //条形图option
-function BarOption(arr,classes){
+function BarOption(arr, classes) {
     var option = {
-        title:{
-            text:'条形图',
-            left:'center'
+        title: {
+            text: '条形图',
+            left: 'center'
         },
-        tooltip: {
-          
-        },
-        xAxis:{
-            type:'category',
+        tooltip: {},
+        xAxis: {
+            type: 'category',
             data: classes
         },
-        yAxis:{
-            type:'value'
+        yAxis: {
+            type: 'value'
         },
-        series:[{
+        series: [{
             data: arr,
-            type:'bar'
+            type: 'bar'
         }]
-    
+
     }
     return option;
 }
 
 //生成饼图数据
-function CreateParData(arr,res){
+function CreateParData(arr, res) {
     var data = [];
-    for(var i = 0; i < res.length; i++){
+    for (var i = 0; i < res.length; i++) {
         var obj = new Object();
         obj.name = res[i];
         obj.value = arr[i];
-        data.push(obj); 
+        data.push(obj);
     }
     return data;
 }
 
 //生成饼图option
-function ParOption(data){
+function ParOption(data) {
     var option = {
-        title:{
-            text:'饼状图',
-            left:'center'
+        title: {
+            text: '饼状图',
+            left: 'center'
         },
         legend: {
             bottom: 0,
         },
-        tooltip: {
-        
-        },
-        series:[{
+        tooltip: {},
+        series: [{
             data: data,
-            type:'pie',
+            type: 'pie',
         }]
 
     }
@@ -522,19 +514,19 @@ function ParOption(data){
 }
 
 //随机两列散点
-function RandomScatter(dataSet, classes){
+function RandomScatter(dataSet, classes) {
     var len = dataSet[0].length;
-    var x = Math.floor(Math.random()*(len - 2) + 1);
-    var y = Math.floor(Math.random()*(len - 2) + 1);
+    var x = Math.floor(Math.random() * (len - 2) + 1);
+    var y = Math.floor(Math.random() * (len - 2) + 1);
     var obj = {};
     obj.x = dataSet[0][x];
     obj.y = dataSet[0][y];
 
-    
-        for(var i = 0; i < classes.length; i++){
-            obj[classes[i]] = [];
-            for(var j = 1; j < dataSet.length; j++){
-            if(classes[i] == dataSet[j][len - 1]){
+
+    for (var i = 0; i < classes.length; i++) {
+        obj[classes[i]] = [];
+        for (var j = 1; j < dataSet.length; j++) {
+            if (classes[i] == dataSet[j][len - 1]) {
                 var arr = [];
                 arr.push(dataSet[j][x]);
                 arr.push(dataSet[j][y]);
@@ -546,12 +538,12 @@ function RandomScatter(dataSet, classes){
 }
 
 //散点系列
-function ScatterSeries(dataSet,classes,obj){
+function ScatterSeries(dataSet, classes, obj) {
     var series = [];
-    for(var i = 0; i < classes.length; i++){
+    for (var i = 0; i < classes.length; i++) {
         series.push({
-            name:classes[i],
-            type:'scatter',
+            name: classes[i],
+            type: 'scatter',
             data: obj[classes[i]]
         })
     }
@@ -559,38 +551,38 @@ function ScatterSeries(dataSet,classes,obj){
 }
 
 //散点Option
-function ScatterOption(series,classes,obj){
+function ScatterOption(series, classes, obj) {
     var option = {
-            title:{
-                text:'散点图',
-                left:'center'
+        title: {
+            text: '散点图',
+            left: 'center'
+        },
+        legend: {
+            bottom: 0,
+            data: classes
+        },
+        tooltip: {
+            formatter: function (params) {
+                return params.seriesName + ' :<br/>'
+                    + params.value[0] + '<br/>'
+                    + params.value[1];
             },
-            legend: {
-                bottom: 0,
-                data: classes
-            },
-            tooltip:{
-                formatter: function (params) {
-                        return params.seriesName + ' :<br/>'
-                        + params.value[0] + '<br/>'
-                        + params.value[1];
-                },
-            },
-            xAxis:{
-                name: obj.x
-            },
-            yAxis:{
-                name: obj.y
-            },
-            series: series
+        },
+        xAxis: {
+            name: obj.x
+        },
+        yAxis: {
+            name: obj.y
+        },
+        series: series
     }
     return option;
 }
 
 //折线系列
-function LineSeries(classes,obj){
+function LineSeries(classes, obj) {
     var series = [];
-    for(var i = 0; i < classes.length; i++){
+    for (var i = 0; i < classes.length; i++) {
         series.push({
             name: classes[i],
             type: 'line',
@@ -603,19 +595,19 @@ function LineSeries(classes,obj){
 }
 
 //折线图Option
-function LineOption(series,classes,obj){
+function LineOption(series, classes, obj) {
     var option = {
-        title:{
-            text:'折线图',
-            left:'center'
+        title: {
+            text: '折线图',
+            left: 'center'
         },
         legend: {
             bottom: 0,
             data: classes
         },
-        tooltip:{
+        tooltip: {
             formatter: function (params) {
-                    return params.seriesName + ' :<br/>'
+                return params.seriesName + ' :<br/>'
                     + params.value[0] + '<br/>'
                     + params.value[1];
             },
@@ -632,10 +624,6 @@ function LineOption(series,classes,obj){
 }
 
 
-
-
-
-
 //从后端拿对应的数据源
 var source = document.getElementById('source').getElementsByTagName('span');
 
@@ -645,10 +633,9 @@ var filename = document.getElementById('source').getElementsByTagName('h3');
 var fileIntroduct = document.getElementById('source').getElementsByTagName('p');
 
 
-
-for(var i = 0; i < source.length; i++){
+for (var i = 0; i < source.length; i++) {
     source[i].index = i;
-    source[i].onclick = function(){
+    source[i].onclick = function () {
 
 
         state = true;
@@ -657,7 +644,7 @@ for(var i = 0; i < source.length; i++){
 
         var submitdata = this.index;
 
-        for(var i = 0; i < source.length; i++) {
+        for (var i = 0; i < source.length; i++) {
 
             source[i].innerHTML = "导入数据集";
 
@@ -670,7 +657,7 @@ for(var i = 0; i < source.length; i++){
 
         //显示加载
         LoadingPic.style.display = 'block';
-        
+
         source[this.index].innerHTML = "正在导入";
 
         source[this.index].style.color = '#75DAAD';
@@ -686,40 +673,40 @@ for(var i = 0; i < source.length; i++){
         //发送请求
         var xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.open("POST",serverAddress + "/api-getDataSet",true);
+        xmlhttp.open("POST", serverAddress + "/api-getDataSet", true);
 
-        xmlhttp.setRequestHeader("Content-type","application/json");
+        xmlhttp.setRequestHeader("Content-type", "application/json");
 
         xmlhttp.send(JSON.stringify(submitdata));
 
-        xmlhttp.onreadystatechange = function() {
+        xmlhttp.onreadystatechange = function () {
 
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                
+
                 dataSet = eval(xmlhttp.responseText);
 
                 dataSet_string = xmlhttp.responseText;
 
                 fit_target = dataSet[0][dataSet[0].length - 1];
 
-                for(var j = 0;j < funcList.length;++j) {
+                for (var j = 0; j < funcList.length; ++j) {
 
                     funcList[j].className = '';
 
                 }
-                
+
                 funcList[num].className = 'active';
-        
+
                 fit_model = num + 1;
 
                 createTable(dataSet);
 
                 state = true;
-        
+
                 index.innerHTML = "已导入";
-        
+
                 index.style.color = '#75DAAD';
-        
+
                 index.style.backgroundColor = 'rgba(117, 218, 173,0.2)';
 
                 //隐藏图片
@@ -733,108 +720,106 @@ for(var i = 0; i < source.length; i++){
 }
 
 
-
-
 //获取图表选择
 var chartList = document.getElementById('chartList').getElementsByTagName('li');
 
 
 //可视化图表
-for(var i = 0; i < chartList.length; i++){
+for (var i = 0; i < chartList.length; i++) {
     chartList[i].index = i;
-    chartList[i].onclick = function(){
-        var rows_length = dataSet.length, 
+    chartList[i].onclick = function () {
+        var rows_length = dataSet.length,
             columns_length = dataSet[0].length;
         clearName(chartList);
         chartList[this.index].className = 'active';
-        var classes = findClass(dataSet,columns_length - 1);
+        var classes = findClass(dataSet, columns_length - 1);
         // document.getElementById('chartShow').innerHTML = '';
-        if(classes.length > 6){
-            for(var j = 0; j < rows_length; j++){
-                
+        if (classes.length > 6) {
+            for (var j = 0; j < rows_length; j++) {
+
                 dataSet[j].push('one');
-                
+
             }
             classes = ['one'];
         }
 
-        if(this.index == 0){
+        if (this.index == 0) {
             //散点
-            var obj = RandomScatter(dataSet,classes);
-            
-            var series = ScatterSeries(dataSet,classes,obj);
-            
-            var option = ScatterOption(series,classes,obj);
-        } else if(this.index == 1){
+            var obj = RandomScatter(dataSet, classes);
+
+            var series = ScatterSeries(dataSet, classes, obj);
+
+            var option = ScatterOption(series, classes, obj);
+        } else if (this.index == 1) {
             //折线
-            var obj = RandomScatter(dataSet,classes);
-            for(var i = 0; i < classes.length; i++){
-                
+            var obj = RandomScatter(dataSet, classes);
+            for (var i = 0; i < classes.length; i++) {
+
                 var name = classes[i];
                 // console.log(obj[name]);
-                obj[name].sort(function(a, b){
+                obj[name].sort(function (a, b) {
                     var value1 = a[0];
                     var value2 = b[0];
                     return value1 - value2;
                 });
             }
-            var series = LineSeries(classes,obj);
-            var option = LineOption(series,classes,obj);
+            var series = LineSeries(classes, obj);
+            var option = LineOption(series, classes, obj);
 
-        } else if(this.index == 2){
+        } else if (this.index == 2) {
             //条形
 
-            var arr = CalPercent(dataSet,classes);
+            var arr = CalPercent(dataSet, classes);
 
-            var option = BarOption(arr,classes);
-        } else if(this.index == 3){
+            var option = BarOption(arr, classes);
+        } else if (this.index == 3) {
             //饼状
 
-            var arr = CalPercent(dataSet,classes);
+            var arr = CalPercent(dataSet, classes);
 
             var data = CreateParData(arr, classes);
 
             var option = ParOption(data);
-        } else if(this.index == 4){
+        } else if (this.index == 4) {
             //平行坐标
-                            
+
             var parallelAxis = createParallelAxis(dataSet);
 
             var series = createParallelSeries(dataSet, classes);
 
-            var option = ParallelOption(classes,parallelAxis,series);
-        
-        } else if(this.index == 5){
+            var option = ParallelOption(classes, parallelAxis, series);
+
+        } else if (this.index == 5) {
             //雷达图
 
             var sum = radViz(dataSet, 1, classes);
 
             var series = RadVizSeries(classes, sum);
-            
-            for(var fe in sum.features) {
+
+            for (var fe in sum.features) {
 
                 series.push({
-                            name: dataSet[0][parseInt(fe) + 1],
-                            type:'scatter',
-                            data: [sum.features[parseInt(fe)]]        
-                        });
+                    name: dataSet[0][parseInt(fe) + 1],
+                    type: 'scatter',
+                    data: [sum.features[parseInt(fe)]]
+                });
                 classes.push(dataSet[0][parseInt(fe) + 1]);
             }
-            var option = creatRadVizOption(series,classes);
+            var option = creatRadVizOption(series, classes);
 
-        } else if(this.index == 6){
+        } else if (this.index == 6) {
             //傅里叶 
-            
-            if(classes > 20) return;
+
+            if (classes > 20) return;
             var series = ASeries(dataSet, classes);
-            var option = AndrewOption(classes,series);
+            var option = AndrewOption(classes, series);
         } else {
             var option = {};
         }
 
-        var myChart = echarts.init(document.getElementById('chartShow'),'light');
-        
-        myChart.setOption(option,true);     
+        var myChart = echarts.init(document.getElementById('chartShow'), 'light');
+
+        myChart.setOption(option, true);
     }
 }
 
@@ -842,16 +827,16 @@ for(var i = 0; i < chartList.length; i++){
 //标签切换
 
 
-function tabChange(){
-    if(state == true){
-        for(var j = 0; j < nav.length; j++){
+function tabChange() {
+    if (state == true) {
+        for (var j = 0; j < nav.length; j++) {
             nav[j].className = 'iconfont';
             part[j].style.display = 'none';
         }
-        if(this.index == 0){
+        if (this.index == 0) {
             pageIntroduct.innerHTML = '数据源';
             searchPart.style.display = 'block';
-        } else if(this.index == nav.length - 1){
+        } else if (this.index == nav.length - 1) {
             pageIntroduct.innerHTML = '可视化';
             searchPart.style.display = 'none';
         }
@@ -864,18 +849,15 @@ function tabChange(){
 
 
 //标签页
-for(var i = 0; i < nav.length; i++){
+for (var i = 0; i < nav.length; i++) {
     nav[i].index = i;
     nav[i].onclick = tabChange;
 }
 
 
-
-  
-
 //清除class
-function clearName(arr){
-    for(var i = 0,len = arr.length; i < len; i++){
+function clearName(arr) {
+    for (var i = 0, len = arr.length; i < len; i++) {
         arr[i].className = "";
     }
 }
@@ -883,12 +865,12 @@ function clearName(arr){
 // 生成表格
 function createTable(array) {
 
-    var table = '<table>', 
+    var table = '<table>',
         allRows = array;
 
-    for(var singleRow = 0; singleRow < allRows.length;singleRow++) {
+    for (var singleRow = 0; singleRow < allRows.length; singleRow++) {
 
-        if(singleRow === 0) {
+        if (singleRow === 0) {
 
             table += '<thead>';
 
@@ -901,9 +883,9 @@ function createTable(array) {
 
         var rowCells = allRows[singleRow];
 
-        for(var rowCell = 0;rowCell < rowCells.length; rowCell++) {
+        for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {
 
-            if(singleRow === 0){
+            if (singleRow === 0) {
 
                 table += '<th>';
 
@@ -938,11 +920,10 @@ function createTable(array) {
     table += '</tbody>';
 
     table += '</table>';
-    
+
     document.getElementById('tableShow').innerHTML = table;
 
 }
-
 
 
 // function createTable(array) {
@@ -985,8 +966,6 @@ function createTable(array) {
 // }
 
 
-
-
 //数据集和模型相关
 var dataSet = null;
 
@@ -1004,7 +983,7 @@ var process = document.getElementById('process').getElementsByTagName('li');
 
 
 //点击提交并预处理
-process[0].onclick = function() {
+process[0].onclick = function () {
 
     //显示加载
     LoadingPic.style.display = 'block';
@@ -1013,23 +992,23 @@ process[0].onclick = function() {
 
         dataSet: dataSet_string,
 
-        dropColumns: [] ,
+        dropColumns: [],
 
         discreteColumns: [],
 
         textColumn: "text"
 
     };
-    
+
     var xmlhttp = new XMLHttpRequest();
 
-    xmlhttp.open("POST",serverAddress + "/api-pretreatment",true);
+    xmlhttp.open("POST", serverAddress + "/api-pretreatment", true);
 
     xmlhttp.setRequestHeader("Content-type", "application/json");
 
     xmlhttp.send(JSON.stringify(submitdata));
 
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
 
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 
@@ -1037,17 +1016,18 @@ process[0].onclick = function() {
 
             console.log(data_hashKey);
 
-        } 
-         //加载隐藏
-         LoadingPic.style.display = 'none';
+        }
+        //加载隐藏
+        LoadingPic.style.display = 'none';
     }
 
 };
 
 //点击训练
-process[1].onclick = function() {
+data.cv_score = undefined;
+process[1].onclick = function () {
 
-    if(data_hashKey == "") {
+    if (data_hashKey == "") {
 
         alert("数据尚未进行预处理");
 
@@ -1067,16 +1047,16 @@ process[1].onclick = function() {
         target: fit_target
 
     };
-    
+
     var xmlhttp = new XMLHttpRequest();
 
-    xmlhttp.open("POST", serverAddress + "/api-fit",true);
+    xmlhttp.open("POST", serverAddress + "/api-fit", true);
 
     xmlhttp.setRequestHeader("Content-type", "application/json");
 
     xmlhttp.send(JSON.stringify(submitdata));
 
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
 
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 
@@ -1090,26 +1070,26 @@ process[1].onclick = function() {
 
             document.getElementById('assess').innerHTML = str;
 
-        } 
-         //加载隐藏
-         LoadingPic.style.display = 'none';
+        }
+        //加载隐藏
+        LoadingPic.style.display = 'none';
     }
 
 };
 
 //生成并插入图片
-function CreatImg(arr){
+function CreatImg(arr) {
     var image = '';
-    for(var i = 0; i < arr.length; i++){
+    for (var i = 0; i < arr.length; i++) {
         var str = arr[i];
-        var dom = '<img src= data:image/png;base64,'+str.substring(2,str.length - 1)+'>';
+        var dom = '<img src= data:image/png;base64,' + str.substring(2, str.length - 1) + '>';
         image += dom;
     }
     document.getElementById('chartResult').innerHTML = image;
 }
 
 //点击预测
-process[2].onclick = function() {
+process[2].onclick = function () {
 
     alert("FREE版还不能进行预测，请尝试我们的PRO版。^_^")
 
@@ -1122,16 +1102,16 @@ process[2].onclick = function() {
         hashKeyII: model_hashKey
 
     };
-    
+
     var xmlhttp = new XMLHttpRequest();
 
-    xmlhttp.open("POST",serverAddress + "/api-predict",true);
+    xmlhttp.open("POST", serverAddress + "/api-predict", true);
 
     xmlhttp.setRequestHeader("Content-type", "application/json");
 
     xmlhttp.send(JSON.stringify(submitdata));
 
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
 
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 
@@ -1149,11 +1129,11 @@ process[2].onclick = function() {
 //算法选择
 var funcList = document.getElementById('funcList').getElementsByTagName('li');
 
-for(var i = 0;i < funcList.length;++i) {
+for (var i = 0; i < funcList.length; ++i) {
 
     funcList[i].index = i;
 
-    funcList[i].onclick = function() {
+    funcList[i].onclick = function () {
 
         alert("FREE版还不能选择算法，请尝试我们的PRO版。^_^")
 

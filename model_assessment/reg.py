@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class reg_assessment:
     def __init__(self, y_predict, y_test):
         """
@@ -17,7 +18,7 @@ class reg_assessment:
 
     def get_MSE(self):
         if self.MSE is not None: return self.MSE
-        self.MSE = np.sum((self.y_predict - self.y_test)**2) / len(self.y_predict)
+        self.MSE = np.sum((self.y_predict - self.y_test) ** 2) / len(self.y_predict)
         return self.MSE
 
     def get_MAE(self):
@@ -34,7 +35,7 @@ class reg_assessment:
     def get_R2(self):
         if self.R_square is not None: return self.R_square
         if self.MSE is None: self.get_MSE()
-        self.R_square = 1 - (self.MSE / np.sum((self.y_test - np.mean(self.y_test))**2))
+        self.R_square = 1 - (self.MSE / np.sum((self.y_test - np.mean(self.y_test)) ** 2))
         return self.R_square
 
     def get_MAPE(self):

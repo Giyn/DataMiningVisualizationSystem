@@ -4,18 +4,19 @@
     font-family: 'iconfont';
     src: url('../font/iconfont.eot');
     src: url('../font/iconfont.eot?#iefix') format('embedded-opentype'),
-        url('../font/iconfont.woff2') format('woff2'),
-        url('../font/iconfont.woff') format('woff'),
-        url('../font/iconfont.ttf') format('truetype'),
-        url('../font/iconfont.svg#iconfont') format('svg');
-  }
-  .iconfont {
+    url('../font/iconfont.woff2') format('woff2'),
+    url('../font/iconfont.woff') format('woff'),
+    url('../font/iconfont.ttf') format('truetype'),
+    url('../font/iconfont.svg#iconfont') format('svg');
+}
+
+.iconfont {
     font-family: "iconfont" !important;
     font-size: 16px;
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
+}
 
 
 table {
@@ -23,8 +24,8 @@ table {
     text-align: center;
     border-collapse: collapse;
     border: 1px solid #000;
-    }
-     
+}
+
 thead:first-child {
     background-color: rgba(90, 141, 248, 0.2);
 }
@@ -56,13 +57,13 @@ body {
     /* background-color: rgba(0, 0, 0, 0.5); */
 }
 
-#LoadingPic img{
+#LoadingPic img {
     position: fixed;
     left: 50%;
     top: 50%;
     width: 400px;
     height: 300px;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
 
 /* 首屏主要内容 */
@@ -71,7 +72,7 @@ body {
 }
 
 #firstScreen .headline {
-    
+
     width: 250px;
     height: 60px;
     line-height: 60px;
@@ -186,7 +187,7 @@ body {
 
 
 #firstScreen .rightbox .data {
-    padding:20px 10px; 
+    padding: 20px 10px;
     display: flex;
     justify-content: space-around;
     /* border-top: 1px solid #918f8f; */
@@ -240,7 +241,7 @@ body {
 
 #firstScreen .rightbox .data span:hover {
     color: #75DAAD;
-    background-color: rgba(117, 218, 173,0.2);
+    background-color: rgba(117, 218, 173, 0.2);
 }
 
 
@@ -248,7 +249,7 @@ body {
 
 
 /* 原始数据 */
-#firstScreen .rightbox .raw-chart{
+#firstScreen .rightbox .raw-chart {
     display: flex;
     padding: 20px 10px;
     flex-wrap: wrap;
@@ -309,7 +310,7 @@ body {
     box-sizing: border-box;
 }
 
-#firstScreen .rightbox .raw-chart .message h4{
+#firstScreen .rightbox .raw-chart .message h4 {
     /* margin: 0 80px 10px; */
     padding: 5px;
     text-align: center;
@@ -321,9 +322,6 @@ body {
     margin: 5px 0;
     font-size: 12px;
 }
-
-
-
 
 
 /* 挖掘结果 */
@@ -350,24 +348,24 @@ body {
     padding: 5px;
     font-size: 16px;
     color: #5A8DF8;
-    background-color: #F5F5FB; 
+    background-color: #F5F5FB;
 }
 
 #firstScreen .rightbox .raw-chart .funcList h5::before {
-    content:'';
+    content: '';
     display: inline-block;
-    width:20px;
-    height:20px;
+    width: 20px;
+    height: 20px;
     background-size: 100% 100%;
     vertical-align: -4px;
 }
 
 #firstScreen .rightbox .raw-chart .funcList .variety::before {
-    background-image:url(../images/fenlei_c.png);
+    background-image: url(../images/fenlei_c.png);
 }
 
 #firstScreen .rightbox .raw-chart .funcList .predict::before {
-    background-image:url(../images/yuce_c.png);
+    background-image: url(../images/yuce_c.png);
 }
 
 #firstScreen .rightbox .raw-chart .funcList li {
@@ -381,7 +379,7 @@ body {
 #firstScreen .rightbox .raw-chart .funcList .active {
     color: #5A8DF8;
     border-left: 5px solid #5A8DF8;
- }
+}
 
 #firstScreen .rightbox #chartResult {
     display: flex;
@@ -397,7 +395,7 @@ body {
 }
 
 #firstScreen .rightbox #chartResult img {
-    width: calc(100%/3);
+    width: calc(100% / 3);
     height: 150px;
     margin: 5px 0;
     transition: all 0.1s;
@@ -405,12 +403,12 @@ body {
 }
 
 #firstScreen .rightbox #chartResult img:hover {
-    transform: scale(1.5,1.5);
+    transform: scale(1.5, 1.5);
 }
 
 #firstScreen .rightbox .table-area {
     margin: 10px;
-} 
+}
 
 #firstScreen .rightbox .table {
     background-color: #fff;

@@ -7,144 +7,141 @@
     <script src="echarts/echarts.min.js"></script>
 </head>
 <body>
-    <div>
-        <input type="file" id="file1" accept="*">
-    </div>
-    <input type="submit" id="submit">
-    
-    <div id="result"></div>
-    <div id="main" style="width: 700px;height: 400px;">
-        
-    </div>
-    <script type="text/javascript">
+<div>
+    <input type="file" id="file1" accept="*">
+</div>
+<input type="submit" id="submit">
+
+<div id="result"></div>
+<div id="main" style="width: 700px;height: 400px;">
+
+</div>
+<script type="text/javascript">
     //本地读取csv文件
 
     var file1 = document.getElementById('file1');
 
     data = "";
 
-    file1.onchange = function(){
+    file1.onchange = function () {
 
         var file = file1.files[0];
 
         var reader = new FileReader();
 
-        reader.readAsText(file,'utf-8');
+        reader.readAsText(file, 'utf-8');
 
-        reader.onload = function(){
+        reader.onload = function () {
 
             data = reader.result;
 
         }
-        
+
     }
 
 
-//找所有分类
-function findClass(dataSet, pos) {
+    //找所有分类
+    function findClass(dataSet, pos) {
 
-    var res = new Array();
-    for(var i = 1; i < dataSet.length; i++){
-        if(!res.includes(dataSet[i][pos])) {
-            res.push(dataSet[i][pos]);
-        }
-    }
-    return res;
-}
-
-//找每个数的百分比
-function CalPercent(dataSet,classes){
-    var lines = dataSet.length;
-    var len = dataSet[0].length;
-    var arr = [];
-    for(var j = 0;j < classes.length; j++){
-        var x = 0;
-        for(var i = 1; i < lines; i++){
-            if(dataSet[i][len - 1] == classes[j]){
-                x++;
+        var res = new Array();
+        for (var i = 1; i < dataSet.length; i++) {
+            if (!res.includes(dataSet[i][pos])) {
+                res.push(dataSet[i][pos]);
             }
         }
-        arr.push(x);
+        return res;
     }
-    return arr;
-}
 
-//生成饼图数据
-function CreateParData(arr,res){
-    var data = [];
-    for(var i = 0; i < res.length; i++){
-        var obj = new Object();
-        obj.name = res[i];
-        obj.value = arr[i];
-        data.push(obj); 
-    }
-    return data;
-}
-
-
-
-
-//生成series
-function Series(dataSet, classes) {
-
-    var colors = [
-        "#6C6C6C", "#AE0000", "#f079b4","#f00bf0", "#8600FF",
-        "#2828FF", "#0072E3", "#00CACA", "#02DF82", "#00DB00", 
-        "#82D900", "#e0e008", "#C6A300", "#f17f0d", "#D94600", 
-        "#a05959", "#949449",  "#4F9D9D", "#5ba3a3", "#9F4D95"
-    ];
-var series = [];
-
-var len = dataSet[0].length;
-
-var basic = Math.floor(Math.random()*colors.length);
-
-for(var i = 1; i < dataSet.length; i++){
-
-        var item = {
-            name: dataSet[i][len - 1],
-
-            type: 'line',
-
-            data: Andrews(dataSet[i], -Math.PI, Math.PI, 0.1),
-
-            itemStyle: {
-                color: colors[(basic + classes.indexOf(dataSet[i][len - 1])) % 20]
+    //找每个数的百分比
+    function CalPercent(dataSet, classes) {
+        var lines = dataSet.length;
+        var len = dataSet[0].length;
+        var arr = [];
+        for (var j = 0; j < classes.length; j++) {
+            var x = 0;
+            for (var i = 1; i < lines; i++) {
+                if (dataSet[i][len - 1] == classes[j]) {
+                    x++;
+                }
             }
-        };
+            arr.push(x);
+        }
+        return arr;
+    }
 
-    series.push(item);
-}
-    return series;
-}
+    //生成饼图数据
+    function CreateParData(arr, res) {
+        var data = [];
+        for (var i = 0; i < res.length; i++) {
+            var obj = new Object();
+            obj.name = res[i];
+            obj.value = arr[i];
+            data.push(obj);
+        }
+        return data;
+    }
 
 
+    //生成series
+    function Series(dataSet, classes) {
 
-            // function dealData(dataset){
-            //     var line_size = dataset.length;
-            //     var len = dataset[0].length;
-            //     var res = {
-            //         pear:[],
-            //         ginkgo:[],
-            //         poplar:[]
-            //     }
-            //     for(var i = 1; i < line_size;i++){
-            //         var arr1 = dataset[i].slice(3,5);
-            //         if(dataset[i][len - 1] == 'pear'){
-            //            res.pear.push(arr1);
-            //         } else if(dataset[i][len - 1] == 'ginkgo'){
-            //            res.ginkgo.push(arr1);
-            //         } else if(dataset[i][len - 1] == 'poplar'){
-            //             res.poplar.push(arr1);
-            //         }
-            //     }
-            //     return res;
-            // }
+        var colors = [
+            "#6C6C6C", "#AE0000", "#f079b4", "#f00bf0", "#8600FF",
+            "#2828FF", "#0072E3", "#00CACA", "#02DF82", "#00DB00",
+            "#82D900", "#e0e008", "#C6A300", "#f17f0d", "#D94600",
+            "#a05959", "#949449", "#4F9D9D", "#5ba3a3", "#9F4D95"
+        ];
+        var series = [];
+
+        var len = dataSet[0].length;
+
+        var basic = Math.floor(Math.random() * colors.length);
+
+        for (var i = 1; i < dataSet.length; i++) {
+
+            var item = {
+                name: dataSet[i][len - 1],
+
+                type: 'line',
+
+                data: Andrews(dataSet[i], -Math.PI, Math.PI, 0.1),
+
+                itemStyle: {
+                    color: colors[(basic + classes.indexOf(dataSet[i][len - 1])) % 20]
+                }
+            };
+
+            series.push(item);
+        }
+        return series;
+    }
+
+
+    // function dealData(dataset){
+    //     var line_size = dataset.length;
+    //     var len = dataset[0].length;
+    //     var res = {
+    //         pear:[],
+    //         ginkgo:[],
+    //         poplar:[]
+    //     }
+    //     for(var i = 1; i < line_size;i++){
+    //         var arr1 = dataset[i].slice(3,5);
+    //         if(dataset[i][len - 1] == 'pear'){
+    //            res.pear.push(arr1);
+    //         } else if(dataset[i][len - 1] == 'ginkgo'){
+    //            res.ginkgo.push(arr1);
+    //         } else if(dataset[i][len - 1] == 'poplar'){
+    //             res.poplar.push(arr1);
+    //         }
+    //     }
+    //     return res;
+    // }
 
     //提交数据
     var submit = document.getElementById('submit');
 
-    submit.onclick = function() {
+    submit.onclick = function () {
 
         var submitdata = {
 
@@ -153,16 +150,16 @@ for(var i = 1; i < dataSet.length; i++){
             sep: ","
 
         };
-        
+
         var xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.open("POST","http://120.76.139.47:8000/api-DataFrame",true);
+        xmlhttp.open("POST", "http://120.76.139.47:8000/api-DataFrame", true);
 
-        xmlhttp.setRequestHeader("Content-type","application/json");
+        xmlhttp.setRequestHeader("Content-type", "application/json");
 
         xmlhttp.send(JSON.stringify(submitdata));
 
-        xmlhttp.onreadystatechange = function() {
+        xmlhttp.onreadystatechange = function () {
 
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 
@@ -178,32 +175,27 @@ for(var i = 1; i < dataSet.length; i++){
                 // console.log(sum);
 
 
-                var classes = findClass(dataSet,dataSet[0].length - 1);
-                var arr = CalPercent(dataSet,classes);
+                var classes = findClass(dataSet, dataSet[0].length - 1);
+                var arr = CalPercent(dataSet, classes);
                 var data = CreateParData(arr, classes);
                 var option = {
-                    title:{
-                        text:'饼状图',
-                        left:'center'
+                    title: {
+                        text: '饼状图',
+                        left: 'center'
                     },
                     legend: {
                         bottom: 0,
                     },
-                    tooltip: {
-                    
-                    },
-                    series:[{
+                    tooltip: {},
+                    series: [{
                         data: data,
-                        type:'pie',
+                        type: 'pie',
                     }]
 
                 }
 
-                var myChart = echarts.init(document.getElementById('main'),'light');
+                var myChart = echarts.init(document.getElementById('main'), 'light');
                 myChart.setOption(option);
-       
-
-
 
 
                 // console.log(dataSet);
@@ -215,19 +207,14 @@ for(var i = 1; i < dataSet.length; i++){
     }
 
 
-
-
-
-
-
     //生成表格
-    var createTable = function(array) {
+    var createTable = function (array) {
 
         var table = '<table>', allRows = array
 
-        for(var singleRow = 0; singleRow < allRows.length;singleRow++) {
+        for (var singleRow = 0; singleRow < allRows.length; singleRow++) {
 
-            if(singleRow === 0) {
+            if (singleRow === 0) {
 
                 table += '<table>';
 
@@ -240,9 +227,9 @@ for(var i = 1; i < dataSet.length; i++){
 
             var rowCells = allRows[singleRow];
 
-            for(var rowCell = 0;rowCell < rowCells.length; rowCell++) {
+            for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {
 
-                if(singleRow === 0){
+                if (singleRow === 0) {
 
                     table += '<th>';
 
@@ -277,10 +264,10 @@ for(var i = 1; i < dataSet.length; i++){
         table += '</tbody>';
 
         table += '</table>';
-        
+
         document.getElementById('result').innerHTML = table;
 
     }
-    </script>
+</script>
 </body>
 </html>

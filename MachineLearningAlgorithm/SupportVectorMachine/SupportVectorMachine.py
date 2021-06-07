@@ -1,19 +1,20 @@
 import base64
-
-import numpy as np
-import cvxopt
-from io import BytesIO
 from base64 import *
+from io import BytesIO
+
+import cvxopt
 import matplotlib.pyplot as plt
-# from sklearn.datasets import load_breast_cancer
-# from sklearn.preprocessing import normalize
-# from sklearn.model_selection import train_test_split
+import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import normalize
 
 
 # 核函数选择
 def linear_kernel(**kwargs):  # 线性核函数
     def f(x1, x2):
         return np.inner(x1, x2)
+
     return f
 
 
@@ -21,12 +22,14 @@ def rbf_kernel(gamma, **kwargs):  # 高斯核函数
     def f(x1, x2):
         dist = np.linalg.norm(x1 - x2) ** 2
         return np.exp(-gamma * dist)
+
     return f
 
 
 def polynomial_kernel(power, coef, **kwargs):  # 多项式核函数
     def f(x1, x2):
         return (np.inner(x1, x2) + coef) ** power
+
     return f
 
 
@@ -94,21 +97,19 @@ class SVM:
         self.support_vectors_labels = y[idx]  # 获取对应标签
         self.intercept = self.support_vectors_labels[0]  # 计算wx+b中的b
         for i in range(len(self.lagr_multipliers)):
-            self.intercept -= self.lagr_multipliers[i] * self.support_vectors_labels[i] *\
+            self.intercept -= self.lagr_multipliers[i] * self.support_vectors_labels[i] * \
                               self.kernel(self.support_vectors[i], self.support_vectors[0])
         y[y == -1] = 0
 
-    def visualize(self, ssler, x, y) :
-
+    def visualize(self):
         res = []
 
         paths = ["MachineLearningAlgorithm/SupportVectorMachine/Pictures/dimension1.png",
-                "MachineLearningAlgorithm/SupportVectorMachine/Pictures/dimension2.png",
-                "MachineLearningAlgorithm/SupportVectorMachine/Pictures/dimension3.png",
-                "MachineLearningAlgorithm/SupportVectorMachine/Pictures/show.png"]
+                 "MachineLearningAlgorithm/SupportVectorMachine/Pictures/dimension2.png",
+                 "MachineLearningAlgorithm/SupportVectorMachine/Pictures/dimension3.png",
+                 "MachineLearningAlgorithm/SupportVectorMachine/Pictures/show.png"]
 
-        for pa in paths :
-
+        for pa in paths:
             with open(pa, 'rb') as f:
                 data = base64.b64encode(f.read())
 
@@ -129,27 +130,6 @@ class SVM:
         y_predict[y_predict == -1] = 0
         return y_predict
 
-    # def plot_picture(self, c,):
-
-
-# def load_data():
-#     data = np.array([
-#         [0.1, 0.7],
-#         [0.3, 0.6],
-#         [0.4, 0.1],
-#         [0.5, 0.4],
-#         [0.8, 0.04],
-#         [0.42, 0.6],
-#         [0.9, 0.4],
-#         [0.6, 0.5],
-#         [0.7, 0.2],
-#         [0.7, 0.67],
-#         [0.27, 0.8],
-#         [0.5, 0.72]
-#     ])
-#     target = [1] * 6 + [0] * 6
-#     return data, np.array(target)
-
 
 def plot_picture(clf, data, target, dimension=(0, 1)):
     # 画图函数
@@ -158,15 +138,17 @@ def plot_picture(clf, data, target, dimension=(0, 1)):
     xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.02),
                          np.arange(y_min, y_max, 0.02))
 
-    data = data[:, dimension[0]:dimension[1]+1]
+    data = data[:, dimension[0]:dimension[1] + 1]
     clf.fit(data, target)
     z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
     z = z.reshape(xx.shape)
     plt.contourf(xx, yy, z, cmap=plt.cm.ocean, alpha=0.6)
     # plt.scatter(data[:6, 0], data[:6, 1], marker='o', color='r', s=100, lw=3)
-    plt.scatter(data[target == 0][:, 0], data[target == 0][:, 1], marker='o', color='r', s=100, lw=3)
+    plt.scatter(data[target == 0][:, 0], data[target == 0][:, 1], marker='o', color='r', s=100,
+                lw=3)
     # plt.scatter(data[6:, 0], data[6:, 1], marker='x', color='k', s=100, lw=3)
-    plt.scatter(data[target == 1][:, 0], data[target == 1][:, 1], marker='x', color='k', s=100, lw=3)
+    plt.scatter(data[target == 1][:, 0], data[target == 1][:, 1], marker='x', color='k', s=100,
+                lw=3)
     gamma = clf.gamma
     plt.title('SVM with $\gamma=$' + str(gamma))
 
@@ -177,35 +159,3 @@ def plot_picture(clf, data, target, dimension=(0, 1)):
     b64 = b64encode(save_file.getvalue()).decode('utf8')
 
     return str(b64)
-
-# if __name__ == '__main__':
-#     data, target = load_data()
-#     plot_picture(data, target, (0, 1), 6, 5, rbf_kernel)
-
-
-
-if __name__ == '__main__':
-    # iris = load_iris()
-    # X = iris.data
-    # y = iris.target
-    # X = normalize(X[y != 0], norm='l2')
-    # # X = X[y != 0]
-    # y = y[y != 0]
-    # y[y == 1] = 0
-    # y[y == 2] = 1
-    # clf = SVM(kernel=polynomial_kernel, power=4, coef=1)
-    # plot_picture(X, y, (2,3), C=1, kernel=polynomial_kernel, power=3, coef=1)
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
-    # clf = SVM(kernel=polynomial_kernel, power=4, coef=1)
-    # clf.fit(X_train, y_train)
-    # y_predict = clf.predict(X_test)
-    # print(np.sum(y_predict == y_test) / len(y_test))
-
-    digit = load_breast_cancer()
-    X = normalize(digit.data, norm='l2')
-    y = digit.target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-    clf = SVM(kernel=polynomial_kernel, power=4, coef=3)
-    clf.fit(X_train, y_train)
-    y_predict = clf.predict(X_test)
-    print(np.sum(y_predict == y_test) / len(y_test))

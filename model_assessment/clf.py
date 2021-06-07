@@ -1,5 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 class clf_assessment:
     def __init__(self, y_test, y_predict=None, y_predict_rate=None):
@@ -9,7 +10,7 @@ class clf_assessment:
         :param y_predict_rate: 模型得出的概率
         :param y_test: 真实数据
         """
-        self.TP, self.FP, self.TN, self.FN = 0,0,0,0
+        self.TP, self.FP, self.TN, self.FN = 0, 0, 0, 0
         self.y_predict = y_predict
         self.y_test = y_test
         self.y_predict_rate = y_predict_rate
@@ -21,17 +22,21 @@ class clf_assessment:
         # 根据阈值判断正类还是负类
         a = np.empty(shape=np.array(self.y_predict_rate).shape)
         for i in range(len(self.y_predict_rate)):
-            if self.y_predict_rate[i] >= threshold: a[i] = 1
-            else: a[i] = 0
+            if self.y_predict_rate[i] >= threshold:
+                a[i] = 1
+            else:
+                a[i] = 0
         self.y_predict = a
 
     def confuse_matrix(self):
         # 计算混淆矩阵
-        TP, FP, TN, FN = 0,0,0,0
+        TP, FP, TN, FN = 0, 0, 0, 0
         for i in range(len(self.y_predict)):
             if self.y_predict[i] == self.y_test[i]:
-                if self.y_predict[i] == 1: TP += 1
-                else: TN += 1
+                if self.y_predict[i] == 1:
+                    TP += 1
+                else:
+                    TN += 1
             elif self.y_predict[i] == 1 and self.y_test[i] == 0:
                 FP += 1
             elif self.y_predict[i] == 0 and self.y_test[i] == 1:
@@ -50,12 +55,13 @@ class clf_assessment:
             print("反例     %3d      %3d" % (self.FP, self.TN))
             return
         else:
-            data = np.array([[self.TP, self.FP],[self.FN, self.TN]])
+            data = np.array([[self.TP, self.FP], [self.FN, self.TN]])
             plt.matshow(data, cmap=plt.cm.Greens)
             plt.colorbar()
             for y in range(len(data)):
                 for x in range(len(data)):
-                    plt.annotate(s=data[x,y], xy=(x, y), horizontalalignment='center', verticalalignment='center')
+                    plt.annotate(s=data[x, y], xy=(x, y), horizontalalignment='center',
+                                 verticalalignment='center')
             plt.ylabel("True label")
             plt.xlabel("Predicted label")
             plt.savefig(filename)
@@ -63,14 +69,14 @@ class clf_assessment:
 
     def TPR(self):
         try:
-           return self.TP / (self.TP + self.FN)
-        except :
+            return self.TP / (self.TP + self.FN)
+        except:
             return 0.
 
     def FPR(self):
         try:
             return self.FP / (self.FP + self.TN)
-        except :
+        except:
             return 0.
 
     def accuracy(self):
@@ -150,4 +156,4 @@ class clf_assessment:
                         number += 1
                     elif pos == neg:
                         number += 0.5
-        print("AUC值为：", number/(N*P))
+        print("AUC值为：", number / (N * P))

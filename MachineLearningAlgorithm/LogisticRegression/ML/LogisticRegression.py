@@ -7,6 +7,7 @@ Created on Tue Jul 28 04:14:56 2020
 import base64
 
 import numpy as np
+
 from .metrics import accuracy_score
 
 
@@ -29,7 +30,7 @@ class LogisticRegression:
         def J(theta, X_b, y):
             y_hat = self._sigmoid(X_b.dot(theta))
             try:
-                return - np.sum(y*np.log(y_hat) + (1-y)*np.log(1-y_hat)) / len(y)
+                return - np.sum(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat)) / len(y)
             except:
                 return float('inf')
 
@@ -37,7 +38,7 @@ class LogisticRegression:
             return X_b.T.dot(self._sigmoid(X_b.dot(theta)) - y) / len(y)
 
         def gradient_descent(X_b, y, initial_theta, eta, n_iters=1e4, epsilon=1e-8):
- 
+
             theta = initial_theta
             cur_iter = 0
 
@@ -87,16 +88,13 @@ class LogisticRegression:
         y_predict = self.predict(X_test)
         return accuracy_score(y_test, y_predict)
 
-    def visualize(self, ssler, x, y) :
-
+    def visualize(self, ssler, x, y):
         res = []
-
         paths = ["MachineLearningAlgorithm/LogisticRegression/Pictures/feature_relative.png",
-                "MachineLearningAlgorithm/LogisticRegression/Pictures/result_1.png",
-                "MachineLearningAlgorithm/LogisticRegression/Pictures/result_2.png"]
+                 "MachineLearningAlgorithm/LogisticRegression/Pictures/result_1.png",
+                 "MachineLearningAlgorithm/LogisticRegression/Pictures/result_2.png"]
 
-        for pa in paths :
-
+        for pa in paths:
             with open(pa, 'rb') as f:
                 data = base64.b64encode(f.read())
 

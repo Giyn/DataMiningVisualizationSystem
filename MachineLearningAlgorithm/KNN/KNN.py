@@ -1,9 +1,9 @@
 import base64
 
-import pandas as pd
+import matplotlib.pyplot as plt
 import numpy as np
 from pandas import DataFrame
-import matplotlib.pyplot as plt
+
 """
 @function:the gaussian function
 @parameter: dis - the independent variable distance
@@ -27,18 +27,20 @@ def gaussian(dist, sigma=10.0):
 @return:score - the right score
 
 """
+
+
 class KNN:
-    def __init__(self,X_train,y_train):
+    def __init__(self, X_train, y_train):
         self.X_train = X_train
-        self.y_train =y_train
+        self.y_train = y_train
         self.assess_matrix = None
         self.presion = 0
 
-
-
-    def fit(self,X_test, y_test):
+    def fit(self, X_test, y_test):
+        global classes
         k = 11  # 超参数取11
-        matrix = DataFrame(np.zeros((3,3)),index=['pear', 'ginkgo', 'poplar'],columns=['pear', 'ginkgo', 'poplar'])
+        matrix = DataFrame(np.zeros((3, 3)), index=['pear', 'ginkgo', 'poplar'],
+                           columns=['pear', 'ginkgo', 'poplar'])
         predict_true = 0  # the num of right predicted
         max = X_test.shape[0]  # the max num of iteration
         y_predict = []
@@ -48,11 +50,9 @@ class KNN:
 
             distances = [np.sqrt(np.sum((x_p - x) ** 2)) for x in self.X_train]
             # calculate the distance between point in x_p and point in x
-            d = np.sort(distances)
             # sort the distances
             nearest = np.argsort(distances)
             # the index of sorted data
-            # print(nearest)
 
             topk_y = [self.y_train[j] for j in nearest[:k]]
             # select k nearest num
@@ -62,7 +62,7 @@ class KNN:
                 voteLabel = topk_y[i]
                 weight = gaussian(distances[nearest[i]])
                 # print(index, dist[index],weight)
-                ## 这里不再是加一，而是权重*1
+                # 这里不再是加一，而是权重*1
                 classCount[voteLabel] = classCount.get(voteLabel, 0) + weight * 1
 
             maxCount = 0
@@ -72,7 +72,7 @@ class KNN:
                     maxCount = value
                     classes = key
             # select the type of max num
-            if (classes == y_p):
+            if classes == y_p:
                 predict_true += 1
                 y_predict.append(classes)
 
@@ -103,8 +103,6 @@ class KNN:
         self.accuracy = accuracy
         self.assess_matrix = assess_matrix
 
-
-
     """
     @function:predict the data
     @parameter:
@@ -120,18 +118,16 @@ class KNN:
         k = 11  # 超参数取11
 
         predict_true = 0  # the num of right predicted
-        max = X_p.shape[0] # the max num of iteration
+        max = X_p.shape[0]  # the max num of iteration
         y_p = []
         for i in range(max):
             x_p = X_p[i]
 
             distances = [np.sqrt(np.sum((x_p - x) ** 2)) for x in self.X_train]
             # calculate the distance between point in x_p and point in x
-            d = np.sort(distances)
             # sort the distances
             nearest = np.argsort(distances)
             # the index of sorted data
-            # print(nearest)
 
             topk_y = [self.y_train[j] for j in nearest[:k]]
             # select k nearest num
@@ -148,8 +144,7 @@ class KNN:
             for i in range(0, k):
                 voteLabel = topk_y[i]
                 weight = gaussian(distances[nearest[i]])
-                # print(index, dist[index],weight)
-                ## 这里不再是加一，而是权重*1
+                # 这里不再是加一，而是权重*1
                 classCount[voteLabel] = classCount.get(voteLabel, 0) + weight * 1
 
             maxCount = 0
@@ -171,20 +166,17 @@ class KNN:
 
         return y_p
 
-
-    def visualize(self, ssler, x, y) :
-
+    def visualize(self, ssler, x, y):
         res = []
 
         paths = ["MachineLearningAlgorithm/KNN/Pictures/raw_andrews_curves.png",
-                "MachineLearningAlgorithm/KNN/Pictures/raw_heatmap.png",
-                "MachineLearningAlgorithm/KNN/Pictures/raw_parallel_coordinates.png",
-                "MachineLearningAlgorithm/KNN/Pictures/raw_radviz.png",
-                "MachineLearningAlgorithm/KNN/Pictures/raw_scatter.png",
-                "MachineLearningAlgorithm/KNN/Pictures/result.png"]
+                 "MachineLearningAlgorithm/KNN/Pictures/raw_heatmap.png",
+                 "MachineLearningAlgorithm/KNN/Pictures/raw_parallel_coordinates.png",
+                 "MachineLearningAlgorithm/KNN/Pictures/raw_radviz.png",
+                 "MachineLearningAlgorithm/KNN/Pictures/raw_scatter.png",
+                 "MachineLearningAlgorithm/KNN/Pictures/result.png"]
 
-        for pa in paths :
-
+        for pa in paths:
             with open(pa, 'rb') as f:
                 data = base64.b64encode(f.read())
 
