@@ -18,7 +18,7 @@
 
 ## :arrow_right_hook: Instruction
 
-配置完 Python 虚拟环境后，修改 `.\js\DMVSystem.js` 文件中的 `var serverAddress` 为本机地址后，运行 `.\App\main.py`，接着打开 `DMVSystem.html` 文件，即可进行本地测试。
+配置完 Python 虚拟环境后，修改 `.\js\DMVSystem.js` 文件中的 `var serverAddress` 为本机地址后，运行 `.\app\main.py`，接着打开 `DMVSystem.html` 文件，即可进行本地测试。
 
 
 
