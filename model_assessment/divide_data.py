@@ -1,6 +1,6 @@
 import numpy as np
 import copy
-from App.utils import *
+from app.utils import *
 
 def train_test_split(X, y, test_ratio, seed=None): # 留出法
     """

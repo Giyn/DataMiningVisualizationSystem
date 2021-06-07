@@ -10,9 +10,9 @@ from io import StringIO
 
 from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
-from App.utils import *
-from App.PoolManager import *
-from App.ModelManager import *
+from app.utils import *
+from app.PoolManager import *
+from app.ModelManager import *
 from MachineLearningAlgorithm.Bayes.NaiveBayes import *
 from model_assessment.divide_data import *
 from model_assessment.reg import *

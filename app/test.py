@@ -1,4 +1,4 @@
-from App.utils import *
+from app.utils import *
 import numpy as np
 from pandas import *
 import matplotlib.pyplot as plt
